@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sonic DNA Analyzer — Demo Videos</title>
+  <meta name="description"
+    content="Interactive demo videos for Sonic DNA Analyzer: 3D music galaxy navigation, similar song discovery, visual playlist generation, and interactive playback." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: rgb(3, 15, 24);
+      --fg: rgb(215, 254, 254);
+      --muted: rgba(215, 254, 254, 0.55);
+      --card: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.12);
+      --accent: #80e6ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(1200px 800px at 10% 10%, rgba(128, 230, 255, 0.08), transparent 60%),
+        radial-gradient(1400px 900px at 90% 20%, rgba(255, 179, 113, 0.06), transparent 65%),
+        var(--bg);
+      color: var(--fg);
+      font-family: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      line-height: 1.6;
+    }
+
+    header {
+      max-width: 1100px;
+      margin: 40px auto 16px;
+      padding: 0 20px;
+    }
+
+    h1 {
+      font-family: "Bricolage Grotesque", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      font-size: clamp(2rem, 1rem + 4vw, 3.25rem);
+      margin: 0 0 10px 0;
+      letter-spacing: 0.2px;
+    }
+
+    p.lead {
+      color: var(--muted);
+      margin: 0;
+      font-size: clamp(0.95rem, 0.85rem + 0.5vw, 1.1rem);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 26px auto 60px;
+      padding: 0 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+
+    @media (min-width: 820px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(6px);
+    }
+
+    .card header {
+      padding: 14px 16px 0 16px;
+      margin: 0;
+    }
+
+    .card h2 {
+      font-family: "Bricolage Grotesque", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial;
+      margin: 0 0 8px 0;
+      font-size: 1.25rem;
+    }
+
+    .card p.desc {
+      margin: 0 0 10px 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    figure {
+      margin: 0;
+      display: block;
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: #000;
+      outline: none;
+    }
+
+    figcaption {
+      padding: 10px 16px 16px 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-note {
+      margin-top: 30px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 10px;
+      margin-left: 6px;
+      border-radius: 999px;
+      background: rgba(128, 230, 255, 0.12);
+      border: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--fg);
+      vertical-align: middle;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Sonic DNA Analyzer <span class="pill">Demo Videos</span></h1>
+    <p class="lead">Playable previews for your README and project site. All videos are set to loop, are muted by
+      default, and will auto play when visible.</p>
+  </header>
+
+  <main>
+    <section class="grid">
+      <!-- Navigation -->
+      <article class="card">
+        <header>
+          <h2>3D Music Galaxy Navigation</h2>
+          <p class="desc">Pan, zoom, and rotate through the galaxy of tracks.</p>
+        </header>
+        <figure>
+          <video playsinline muted loop controls preload="metadata" data-title="Navigation">
+            <source src="docs/navigation.mp4" type="video/mp4" />
+            <source src="docs/navigation.mov" type="video/quicktime" />
+            Your browser does not support embedded video. <a href="docs/navigation.mp4">Download the clip</a>.
+          </video>
+          <figcaption>Navigation demo.</figcaption>
+        </figure>
+      </article>
+
+      <!-- Similar Songs -->
+      <article class="card">
+        <header>
+          <h2>Similar Song Discovery</h2>
+          <p class="desc">Click a track to reveal acoustically similar neighbors.</p>
+        </header>
+        <figure>
+          <video playsinline muted loop controls preload="metadata" data-title="Similar Songs">
+            <source src="docs/similar-songs.mp4" type="video/mp4" />
+            <source src="docs/similar-songs.mov" type="video/quicktime" />
+            Your browser does not support embedded video. <a href="docs/similar-songs.mp4">Download the clip</a>.
+          </video>
+          <figcaption>Similar songs demo.</figcaption>
+        </figure>
+      </article>
+
+      <!-- Playlist Generation -->
+      <article class="card">
+        <header>
+          <h2>Visual Playlist Generation</h2>
+          <p class="desc">Select a path through the galaxy to create a playlist.</p>
+        </header>
+        <figure>
+          <video playsinline muted loop controls preload="metadata" data-title="Playlist Generation">
+            <source src="docs/playlist-generation.mp4" type="video/mp4" />
+            <source src="docs/playlist-generation.mov" type="video/quicktime" />
+            Your browser does not support embedded video. <a href="docs/playlist-generation.mp4">Download the clip</a>.
+          </video>
+          <figcaption>Playlist creation demo.</figcaption>
+        </figure>
+      </article>
+
+      <!-- Start and End Track -->
+      <article class="card">
+        <header>
+          <h2>Interactive Music Playback</h2>
+          <p class="desc">Start, pause, and navigate tracks from the 3D scene.</p>
+        </header>
+        <figure>
+          <video playsinline muted loop controls preload="metadata" data-title="Playback Controls">
+            <source src="docs/start-end-track.mp4" type="video/mp4" />
+            <source src="docs/start-end-track.mov" type="video/quicktime" />
+            Your browser does not support embedded video. <a href="docs/start-end-track.mp4">Download the clip</a>.
+          </video>
+          <figcaption>Playback controls demo.</figcaption>
+        </figure>
+      </article>
+    </section>
+
+    <p class="footer-note">
+      Tip: keep video files small for fast loading. Target under 10 MB per clip when possible. If you only have
+      <code>.mov</code>, include both sources as shown above. Modern browsers will pick the best one.
+    </p>
+  </main>
+
+  <script>
+    // Auto play/pause when videos enter or leave the viewport
+    const videos = Array.from(document.querySelectorAll('video'));
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        const v = e.target;
+        if (e.isIntersecting) {
+          // Auto play only if muted to avoid gesture requirements
+          if (v.muted) {v.play().catch(() => { });}
+        } else {
+          v.pause();
+        }
+      }
+    }, {threshold: 0.35});
+
+    videos.forEach(v => io.observe(v));
+
+    // Keyboard shortcuts: Space toggles the video that is most visible
+    document.addEventListener('keydown', (ev) => {
+      if (ev.code !== 'Space') return;
+      ev.preventDefault();
+      let best = null, bestRatio = 0;
+      for (const v of videos) {
+        const r = v.getBoundingClientRect();
+        const visibleX = Math.max(0, Math.min(r.right, innerWidth) - Math.max(r.left, 0));
+        const visibleY = Math.max(0, Math.min(r.bottom, innerHeight) - Math.max(r.top, 0));
+        const area = r.width * r.height;
+        const visibleArea = visibleX * visibleY;
+        const ratio = area ? visibleArea / area : 0;
+        if (ratio > bestRatio) {best = v; bestRatio = ratio;}
+      }
+      if (best) {
+        if (best.paused) best.play().catch(() => { }); else best.pause();
+      }
+    });
+  </script>
+</body>
+
+</html>
