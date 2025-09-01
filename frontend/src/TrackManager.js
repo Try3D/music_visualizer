@@ -1,422 +1,302 @@
-export class TrackManager {
-    constructor(apiBase) {
-        this.selectedTracks = []
-        this.currentTrackIndex = -1
-        this.currentTrack = null
-        this.audio = new Audio()
-        this.isPlaying = false
-        this.isMuted = false
-        this.previousVolume = 1.0
-        this.apiBase = apiBase
-        
-        this.setupAudioEvents()
-    }
+/**
+ * TrackManager - Handles all track-related operations for the music player
+ * This class manages track loading, selection, playback control, and persistence
+ */
+class TrackManager {
+  constructor(musicPlayer) {
+    this.musicPlayer = musicPlayer;
+  }
 
-    loadSelectedTracks() {
-        try {
-            const saved = localStorage.getItem('musicPlayer_selectedTracks')
-            if (saved) {
-                this.selectedTracks = JSON.parse(saved)
-                console.log(`[LOAD] Loaded ${this.selectedTracks.length} selected tracks from localStorage`)
-            }
-        } catch (error) {
-            console.error('Error loading selected tracks:', error)
-            this.selectedTracks = []
+  async loadTracks() {
+    try {
+      this.musicPlayer.utilities.vlog("[TRACKS] Loading positioned tracks from API...");
+      const response = await fetch(
+        `${this.musicPlayer.apiBase}/tracks/positioned`,
+        {
+          method: "GET",
+          mode: "cors",
+          credentials: "omit",
+        },
+      );
+      if (!response.ok) {
+        this.musicPlayer.utilities.vlog(
+          `[WARN] Positioned tracks not available (${response.status}), falling back to regular tracks`,
+          "warning",
+        );
+        const fallbackResponse = await fetch(
+          `${this.musicPlayer.apiBase}/tracks`,
+          {
+            method: "GET",
+            mode: "cors",
+            credentials: "omit",
+          },
+        );
+        if (!fallbackResponse.ok) {
+          throw new Error(
+            `Failed to load tracks: ${fallbackResponse.status} ${fallbackResponse.statusText}`,
+          );
         }
-    }
+        const fallbackData = await fallbackResponse.json();
 
-    saveSelectedTracks() {
-        try {
-            localStorage.setItem('musicPlayer_selectedTracks', JSON.stringify(this.selectedTracks))
-        } catch (error) {
-            console.error('Error saving selected tracks:', error)
+        const tracks = Array.isArray(fallbackData)
+          ? fallbackData
+          : fallbackData.tracks || [];
+        this.musicPlayer.tracks = tracks;
+        this.musicPlayer.trackPositions = null;
+        this.musicPlayer.connections = [];
+        this.musicPlayer.utilities.vlog(
+          `[SUCCESS] Loaded ${this.musicPlayer.tracks.length} tracks via fallback`,
+          "success",
+        );
+        this.musicPlayer.utilities.vlog(
+          `[DEBUG] First track UUID: ${this.musicPlayer.tracks[0]?.uuid}`,
+          "debug",
+        );
+      } else {
+        const positionedData = await response.json();
+        this.musicPlayer.tracks = positionedData.tracks;
+        this.musicPlayer.trackPositions = positionedData.tracks;
+        this.musicPlayer.connections = positionedData.connections || [];
+        this.musicPlayer.utilities.vlog(
+          `[SUCCESS] Loaded ${this.musicPlayer.tracks.length} positioned tracks with ${this.musicPlayer.connections.length} connections`,
+          "success",
+        );
+        this.musicPlayer.utilities.vlog(
+          `[DEBUG] First positioned track UUID: ${this.musicPlayer.tracks[0]?.uuid}`,
+          "debug",
+        );
+
+        if (positionedData.metadata) {
+          this.musicPlayer.utilities.vlog(
+            `[DATA] Metadata: ${positionedData.metadata.source}`,
+            "debug",
+          );
         }
+      }
+      this.musicPlayer.utilities.vlog(
+        `[SUCCESS] Total tracks loaded: ${this.musicPlayer.tracks.length}`,
+        "success",
+      );
+
+      this.updateTrackCountDisplay();
+    } catch (error) {
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
+        this.musicPlayer.utilities.vlog(
+          "[ERROR] Network error - Failed to connect to API. Please check:",
+          "error",
+        );
+        this.musicPlayer.utilities.vlog(
+          "[ERROR] 1. Is the backend server running on localhost:8000?",
+          "error",
+        );
+        this.musicPlayer.utilities.vlog(
+          "[ERROR] 2. Is CORS properly configured?",
+          "error",
+        );
+        this.musicPlayer.utilities.vlog(
+          "[ERROR] 3. Are there any network/firewall issues?",
+          "error",
+        );
+      }
+      throw new Error(
+        `Failed to connect to music API. Please ensure the server is running on localhost:8000. Details: ${error.message}`,
+      );
+    }
+  }
+
+  playNext() {
+    if (this.musicPlayer.selectedTracks.length === 0) {
+      return;
     }
 
-    addToSelectedTracks(track, trackId, updateCallbacks) {
-        console.log(`[ADD] Adding track to selected tracks: ${trackId}`)
-        console.log(`[COUNT] Current selected tracks count: ${this.selectedTracks.length}`)
-        
-        // Check if already selected
-        const existing = this.selectedTracks.findIndex(t => (t.track_id || t.id) === trackId)
-        if (existing === -1) {
-            this.selectedTracks.push(track)
-            this.currentTrackIndex = this.selectedTracks.length - 1
-            this.saveSelectedTracks()
-            
-            if (updateCallbacks) {
-                if (updateCallbacks.updateSelectedTracksList) {
-                    updateCallbacks.updateSelectedTracksList()
-                }
-                if (updateCallbacks.createPlaylistFlow) {
-                    updateCallbacks.createPlaylistFlow()
-                }
-            }
-            
-            console.log(`[SUCCESS] Added track to selection: ${trackId}, new count: ${this.selectedTracks.length}`)
-        } else {
-            // Track already exists, just update current index
-            this.currentTrackIndex = existing
-            if (updateCallbacks && updateCallbacks.updateSelectedTracksList) {
-                updateCallbacks.updateSelectedTracksList()
-            }
-            console.log(`[INFO] Track already selected, updated index: ${trackId}`)
+    if (this.musicPlayer.currentTrackIndex === -1) {
+      this.musicPlayer.currentTrackIndex = 0;
+    } else {
+      this.musicPlayer.currentTrackIndex =
+        (this.musicPlayer.currentTrackIndex + 1) %
+        this.musicPlayer.selectedTracks.length;
+    }
+
+    this.playTrackByIndex(this.musicPlayer.currentTrackIndex);
+  }
+
+  playPrevious() {
+    if (this.musicPlayer.selectedTracks.length === 0) {
+      return;
+    }
+
+    if (this.musicPlayer.currentTrackIndex === -1) {
+      this.musicPlayer.currentTrackIndex =
+        this.musicPlayer.selectedTracks.length - 1;
+    } else {
+      this.musicPlayer.currentTrackIndex =
+        this.musicPlayer.currentTrackIndex <= 0
+          ? this.musicPlayer.selectedTracks.length - 1
+          : this.musicPlayer.currentTrackIndex - 1;
+    }
+
+    this.playTrackByIndex(this.musicPlayer.currentTrackIndex);
+  }
+
+  playTrackByIndex(index) {
+    if (index < 0 || index >= this.musicPlayer.selectedTracks.length) return;
+
+    const track = this.musicPlayer.selectedTracks[index];
+    const trackId = track.track_id || track.id;
+    const sphere = this.musicPlayer.trackMap?.get(trackId);
+
+    this.musicPlayer.currentTrackIndex = index;
+
+    this.musicPlayer.uiManager.updateSelectedTracksList();
+
+    if (sphere) {
+      this.musicPlayer.audioManager.playTrack(track, sphere);
+    } else {
+      this.musicPlayer.audioManager.playTrack(track, null);
+    }
+  }
+
+  addToSelectedTracks(track, trackId) {
+    const existing = this.musicPlayer.selectedTracks.findIndex(
+      (t) => (t.track_id || t.id) === trackId,
+    );
+    if (existing === -1) {
+      this.musicPlayer.selectedTracks.push(track);
+      this.musicPlayer.currentTrackIndex =
+        this.musicPlayer.selectedTracks.length - 1;
+      this.saveSelectedTracks();
+      this.musicPlayer.uiManager.updateSelectedTracksList();
+
+      this.musicPlayer.flowSystem.createPlaylistFlow();
+    } else {
+      this.musicPlayer.currentTrackIndex = existing;
+      this.musicPlayer.uiManager.updateSelectedTracksList();
+    }
+  }
+
+  removeFromSelectedTracks(trackId) {
+    const index = this.musicPlayer.selectedTracks.findIndex(
+      (t) => (t.track_id || t.id) === trackId,
+    );
+    if (index !== -1) {
+      this.musicPlayer.selectedTracks.splice(index, 1);
+
+      if (this.musicPlayer.currentTrackIndex >= index) {
+        this.musicPlayer.currentTrackIndex = Math.max(
+          0,
+          this.musicPlayer.currentTrackIndex - 1,
+        );
+      }
+      if (this.musicPlayer.selectedTracks.length === 0) {
+        this.musicPlayer.currentTrackIndex = -1;
+      }
+
+      this.saveSelectedTracks();
+      this.musicPlayer.uiManager.updateSelectedTracksList();
+
+      this.musicPlayer.flowSystem.createPlaylistFlow();
+
+      if (this.musicPlayer.discoveryMode === "none") {
+        this.musicPlayer.connectionManager.showPlaylistConnections();
+      }
+    }
+  }
+
+  clearAllSelectedTracks() {
+    this.musicPlayer.selectedTracks = [];
+    this.musicPlayer.currentTrackIndex = -1;
+    this.saveSelectedTracks();
+    this.musicPlayer.connectionManager.clearAllConnections();
+
+    this.musicPlayer.flowSystem.createPlaylistFlow();
+
+    this.musicPlayer.uiManager.updateSelectedTracksList();
+  }
+
+  loadSelectedTracks() {
+    try {
+      const saved = localStorage.getItem("musicPlayer_selectedTracks");
+      if (saved) {
+        this.musicPlayer.selectedTracks = JSON.parse(saved);
+      }
+    } catch (error) {
+      this.musicPlayer.selectedTracks = [];
+    }
+  }
+
+  saveSelectedTracks() {
+    try {
+      localStorage.setItem(
+        "musicPlayer_selectedTracks",
+        JSON.stringify(this.musicPlayer.selectedTracks),
+      );
+    } catch (error) {}
+  }
+
+  restoreVisualSelections() {
+    this.musicPlayer.selectedTracks.forEach((trackData, index) => {
+      const trackId = trackData.track_id || trackData.uuid || trackData.id;
+
+      let sphere = null;
+
+      if (this.musicPlayer.trackMap && this.musicPlayer.trackMap.has(trackId)) {
+        sphere = this.musicPlayer.trackMap.get(trackId);
+      } else {
+        sphere = this.musicPlayer.musicSpheres?.find((s) => {
+          const sphereTrackId =
+            s.userData.track.track_id ||
+            s.userData.track.uuid ||
+            s.userData.track.id;
+          return sphereTrackId === trackId;
+        });
+      }
+
+      if (sphere) {
+        this.musicPlayer.clickedSpheres.add(trackId);
+        this.musicPlayer.visualEffects.addBloomEffect(sphere);
+        sphere.scale.set(1.3, 1.3, 1.3);
+
+        if (this.musicPlayer.discoveryMode !== "none") {
+          this.musicPlayer.addConnectionsForSphere(trackId);
         }
+      }
+    });
+
+    if (this.musicPlayer.discoveryMode === "none") {
+      this.musicPlayer.connectionManager.showPlaylistConnections();
     }
 
-    removeFromSelectedTracks(trackId, updateCallbacks) {
-        const index = this.selectedTracks.findIndex(t => (t.track_id || t.id) === trackId)
-        if (index !== -1) {
-            this.selectedTracks.splice(index, 1)
-            
-            // Adjust current index
-            if (this.currentTrackIndex >= index) {
-                this.currentTrackIndex = Math.max(0, this.currentTrackIndex - 1)
-            }
-            if (this.selectedTracks.length === 0) {
-                this.currentTrackIndex = -1
-            }
-            
-            this.saveSelectedTracks()
-            
-            if (updateCallbacks) {
-                if (updateCallbacks.updateSelectedTracksList) {
-                    updateCallbacks.updateSelectedTracksList()
-                }
-                if (updateCallbacks.createPlaylistFlow) {
-                    updateCallbacks.createPlaylistFlow()
-                }
-                if (updateCallbacks.showPlaylistConnections) {
-                    updateCallbacks.showPlaylistConnections()
-                }
-            }
-        }
+    this.updateTrackCountDisplay();
+  }
+
+  updateTrackCountDisplay() {
+    const galaxyInfo = document.getElementById("galaxy-info");
+    if (galaxyInfo) {
+      galaxyInfo.innerHTML = `
+                <div style="font-size: 12px; color: #B3B3B3; line-height: 1.6;">
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                        <i data-lucide="bar-chart" style="width: 12px; height: 12px; color: #1DB954;"></i>
+                        Total Tracks: <span style="color: #1DB954; font-weight: bold;">${this.musicPlayer.tracks.length}</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                        <i data-lucide="heart" style="width: 12px; height: 12px; color: #E91E63;"></i>
+                        Selected Tracks: <span style="color: #E91E63; font-weight: bold;">${this.musicPlayer.selectedTracks.length}</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <i data-lucide="network" style="width: 12px; height: 12px; color: #9C27B0;"></i>
+                        Active Connections: <span style="color: #9C27B0; font-weight: bold;">${Array.from(this.musicPlayer.activeConnections.values()).reduce((total, lines) => total + lines.length, 0)}</span>
+                    </div>
+                </div>
+            `;
     }
 
-    clearAllSelectedTracks(updateCallbacks) {
-        this.selectedTracks = []
-        this.currentTrackIndex = -1
-        this.saveSelectedTracks()
-        
-        if (updateCallbacks) {
-            if (updateCallbacks.clearAllConnections) {
-                updateCallbacks.clearAllConnections()
-            }
-            if (updateCallbacks.createPlaylistFlow) {
-                updateCallbacks.createPlaylistFlow()
-            }
-            if (updateCallbacks.updateSelectedTracksList) {
-                updateCallbacks.updateSelectedTracksList()
-            }
-        }
-        
-        console.log('[CLEAR] Cleared all selected tracks')
+    if (typeof lucide !== "undefined" && lucide.createIcons) {
+      lucide.createIcons();
     }
 
-    playNext(trackMap) {
-        if (this.selectedTracks.length === 0) {
-            console.log('🚫 No tracks in playlist to play next')
-            return
-        }
-        
-        // If no track is currently playing, start from the beginning
-        if (this.currentTrackIndex === -1) {
-            console.log('🎵 Starting playlist from beginning')
-            this.currentTrackIndex = 0
-        } else {
-            // Move to next track with looping
-            this.currentTrackIndex = (this.currentTrackIndex + 1) % this.selectedTracks.length
-            console.log(`🎵 Moving to next track: ${this.currentTrackIndex + 1}/${this.selectedTracks.length}`)
-        }
-        
-        this.playTrackByIndex(this.currentTrackIndex, trackMap)
-    }
-
-    playPrevious(trackMap) {
-        if (this.selectedTracks.length === 0) {
-            console.log('🚫 No tracks in playlist to play previous')
-            return
-        }
-        
-        // If no track is currently playing, start from the end
-        if (this.currentTrackIndex === -1) {
-            console.log('🎵 Starting playlist from end')
-            this.currentTrackIndex = this.selectedTracks.length - 1
-        } else {
-            // Move to previous track with looping
-            this.currentTrackIndex = this.currentTrackIndex <= 0 
-                ? this.selectedTracks.length - 1 
-                : this.currentTrackIndex - 1
-            console.log(`🎵 Moving to previous track: ${this.currentTrackIndex + 1}/${this.selectedTracks.length}`)
-        }
-        
-        this.playTrackByIndex(this.currentTrackIndex, trackMap)
-    }
-
-    playTrackByIndex(index, trackMap, playTrackCallback, updateSelectedTracksListCallback) {
-        if (index < 0 || index >= this.selectedTracks.length) return
-        
-        console.log(`🎯 Playing track by index: ${index}`)
-        
-        const track = this.selectedTracks[index]
-        const trackId = track.track_id || track.id
-        const sphere = trackMap?.get(trackId)
-        
-        // Update current track index
-        this.currentTrackIndex = index
-        
-        // Update the UI to reflect the new current track
-        if (updateSelectedTracksListCallback) {
-            updateSelectedTracksListCallback()
-        }
-        
-        if (sphere) {
-            // Call the proper backend playTrack method
-            if (playTrackCallback) {
-                playTrackCallback(track, sphere)
-            }
-            console.log(`🎵 Playing track ${index + 1}/${this.selectedTracks.length}: ${trackId}`)
-        } else {
-            console.warn(`⚠️ Could not find sphere for track: ${trackId}`)
-            // Still try to play without sphere reference
-            if (playTrackCallback) {
-                playTrackCallback(track, null)
-            }
-        }
-    }
-
-    async playTrack(track, sphere, updateCallbacks) {
-        const trackUuid = track.uuid
-        const trackId = track.track_id || track.id
-        
-        if (!trackUuid) {
-            console.error('[PLAY] ❌ Track missing required uuid:', track)
-            if (updateCallbacks && updateCallbacks.showAudioError) {
-                updateCallbacks.showAudioError(trackId || 'unknown', 'Track missing UUID')
-            }
-            return
-        }
-
-        try {
-            console.log(`[PLAY] 🎵 Starting playback for track: ${trackId} (UUID: ${trackUuid})`)
-            
-            if (updateCallbacks && updateCallbacks.vlog) {
-                updateCallbacks.vlog(`[PLAY] Starting playback: ${trackId} (UUID: ${trackUuid})`)
-            }
-            
-            // Store current track info with error handling
-            this.currentTrack = { track, sphere, trackId, trackUuid }
-            
-            // Update track info UI
-            if (updateCallbacks && updateCallbacks.updateTrackInfo) {
-                updateCallbacks.updateTrackInfo(track)
-            }
-            
-            // Use correct UUID-based audio endpoint
-            const audioUrl = `${this.apiBase}/uuid/${trackUuid}/audio`
-            console.log(`[PLAY] 🎵 Requesting audio URL: ${audioUrl}`)
-            
-            // Set audio source and attempt playback
-            this.audio.src = audioUrl
-            
-            // Visual feedback - make sphere glow and scale up
-            if (sphere) {
-                sphere.material.emissive.setHex(0x00FF00) // Bright green for playing
-                sphere.material.emissiveIntensity = 0.8
-                sphere.scale.set(1.4, 1.4, 1.4)
-                
-                // Add stronger bloom for currently playing track
-                if (updateCallbacks && updateCallbacks.addBloomEffect) {
-                    updateCallbacks.addBloomEffect(sphere)
-                }
-            }
-            
-            // Attempt to resume AudioContext if suspended (for user interaction compliance)
-            if (updateCallbacks && updateCallbacks.audioAnalysis && updateCallbacks.audioAnalysis.audioContext) {
-                if (updateCallbacks.audioAnalysis.audioContext.state === 'suspended') {
-                    console.log('[PLAY] 🎵 Resuming suspended AudioContext')
-                    await updateCallbacks.audioAnalysis.audioContext.resume()
-                }
-            }
-            
-            // Start playback
-            try {
-                await this.audio.play()
-                this.isPlaying = true
-                
-                if (updateCallbacks) {
-                    if (updateCallbacks.updatePlayButton) {
-                        updateCallbacks.updatePlayButton()
-                    }
-                    if (updateCallbacks.updateNavigationButtons) {
-                        updateCallbacks.updateNavigationButtons()
-                    }
-                    if (updateCallbacks.vlog) {
-                        updateCallbacks.vlog(`[SUCCESS] Playing: ${track.metadata?.track_display || trackId}`, 'success')
-                    }
-                }
-                
-                console.log(`[SUCCESS] ✅ Successfully started playback for: ${trackId}`)
-                
-            } catch (playError) {
-                console.error(`[PLAY] ❌ Play error for track ${trackId} (UUID: ${trackUuid}):`, playError)
-                this.isPlaying = false
-                
-                if (updateCallbacks) {
-                    if (updateCallbacks.showAudioError) {
-                        updateCallbacks.showAudioError(trackId, `Play failed: ${playError.message}`)
-                    }
-                    if (updateCallbacks.updatePlayButton) {
-                        updateCallbacks.updatePlayButton()
-                    }
-                }
-            }
-            
-        } catch (error) {
-            console.error(`[PLAY] ❌ Failed to play track ${trackId} (UUID: ${trackUuid}):`, error)
-            this.isPlaying = false
-            
-            if (updateCallbacks) {
-                if (updateCallbacks.showAudioError) {
-                    updateCallbacks.showAudioError(trackId, `Failed: ${error.message}`)
-                }
-                if (updateCallbacks.updatePlayButton) {
-                    updateCallbacks.updatePlayButton()
-                }
-                if (updateCallbacks.vlog) {
-                    updateCallbacks.vlog(`[ERROR] Failed to play: ${error.message}`, 'error')
-                }
-            }
-        }
-    }
-
-    setupAudioEvents(updateCallbacks) {
-        this.audio.addEventListener('timeupdate', () => {
-            if (this.audio.duration) {
-                const progress = (this.audio.currentTime / this.audio.duration) * 100
-                const progressBar = document.getElementById('progress-bar')
-                if (progressBar) {
-                    progressBar.value = progress
-                }
-                
-                // Update time display
-                const currentTime = this.formatTime(this.audio.currentTime)
-                const totalTime = this.formatTime(this.audio.duration)
-                const timeDisplay = document.getElementById('time-display')
-                if (timeDisplay) {
-                    timeDisplay.textContent = `${currentTime} / ${totalTime}`
-                }
-            }
-        })
-
-        this.audio.addEventListener('ended', () => {
-            this.isPlaying = false
-            if (updateCallbacks && updateCallbacks.updatePlayButton) {
-                updateCallbacks.updatePlayButton()
-            }
-            
-            // Reset current track sphere visual effects (only if sphere exists)
-            if (this.currentTrack && this.currentTrack.sphere && updateCallbacks) {
-                // Keep bloom if track is selected, otherwise remove emissive
-                const trackId = this.currentTrack.track.track_id || this.currentTrack.track.uuid
-                if (updateCallbacks.clickedSpheres && updateCallbacks.clickedSpheres.has(trackId)) {
-                    if (updateCallbacks.addBloomEffect) {
-                        updateCallbacks.addBloomEffect(this.currentTrack.sphere)
-                    }
-                } else {
-                    this.currentTrack.sphere.material.emissive.setHex(0x000000)
-                    this.currentTrack.sphere.material.emissiveIntensity = 0
-                }
-            }
-            
-            // Auto-play next track in playlist/path
-            if (this.selectedTracks.length > 1) {
-                console.log('🎵 Track ended, auto-playing next...')
-                if (updateCallbacks && updateCallbacks.playNext) {
-                    updateCallbacks.playNext()
-                }
-            }
-        })
-        
-        this.audio.addEventListener('loadstart', () => {
-            console.log('🎵 Audio loading started...')
-        })
-        
-        this.audio.addEventListener('canplay', () => {
-            console.log('🎵 Audio can start playing')
-        })
-        
-        this.audio.addEventListener('error', (error) => {
-            console.error('🎵 Audio error:', error)
-            this.isPlaying = false
-            if (updateCallbacks && updateCallbacks.updatePlayButton) {
-                updateCallbacks.updatePlayButton()
-            }
-        })
-        
-        this.audio.addEventListener('pause', () => {
-            console.log('🎵 Audio paused')
-            this.isPlaying = false
-            if (updateCallbacks && updateCallbacks.updatePlayButton) {
-                updateCallbacks.updatePlayButton()
-            }
-        })
-        
-        this.audio.addEventListener('play', () => {
-            console.log('🎵 Audio started playing')
-            this.isPlaying = true
-            if (updateCallbacks && updateCallbacks.updatePlayButton) {
-                updateCallbacks.updatePlayButton()
-            }
-        })
-    }
-
-    formatTime(seconds) {
-        if (isNaN(seconds)) return '0:00'
-        const mins = Math.floor(seconds / 60)
-        const secs = Math.floor(seconds % 60)
-        return `${mins}:${secs.toString().padStart(2, '0')}`
-    }
-
-    toggleMute() {
-        if (this.isMuted) {
-            this.audio.volume = this.previousVolume
-            this.isMuted = false
-        } else {
-            this.previousVolume = this.audio.volume
-            this.audio.volume = 0
-            this.isMuted = true
-        }
-    }
-
-    setVolume(volume) {
-        this.audio.volume = volume
-        if (volume > 0 && this.isMuted) {
-            this.isMuted = false
-        }
-    }
-
-    getSelectedTracks() {
-        return this.selectedTracks
-    }
-
-    getCurrentTrackIndex() {
-        return this.currentTrackIndex
-    }
-
-    getCurrentTrack() {
-        return this.currentTrack
-    }
-
-    getIsPlaying() {
-        return this.isPlaying
-    }
-
-    getIsMuted() {
-        return this.isMuted
-    }
-
-    getAudio() {
-        return this.audio
-    }
+    this.musicPlayer.uiManager.updateSelectedTracksList();
+  }
 }
+
+export default TrackManager;
+

@@ -79,15 +79,18 @@
     }
 
     .video-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-      margin: 30px 0;
+      display: flex;
+      flex-direction: column;
+      /* stack vertically */
+      gap: 2rem;
+      /* spacing between videos */
     }
 
     .video-item {
-      text-align: center;
+      max-width: 600px;
+      /* optional: control width */
     }
+
 
     .video-item h4 {
       margin: 0 0 15px 0;
@@ -131,7 +134,7 @@
 </head>
 
 <body>
-  <h1>Sonic DNA Analyzer</h1>
+  <h1>Sonic Analyzer</h1>
   <h2>3D Music Discovery Platform</h2>
 
   <h3>My Solution</h3>
@@ -142,12 +145,12 @@
   <h3>Demo Videos</h3>
   <div class="video-grid">
     <div class="video-item">
-      <h4>Galaxy Navigation</h4>
+      <h4>Song Navigation</h4>
       <video controls preload="metadata">
         <source src="docs/navigation.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
-      <p>Pan, zoom, and rotate through the 3D galaxy</p>
+      <p>Pan, zoom, and rotate through your songs</p>
     </div>
 
     <div class="video-item">
@@ -156,7 +159,7 @@
         <source src="docs/similar-songs.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
-      <p>Click tracks to reveal similar neighbors</p>
+      <p>In Similarity mode, Click tracks to reveal similar neighbors</p>
     </div>
 
     <div class="video-item">
@@ -165,16 +168,16 @@
         <source src="docs/playlist-generation.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
-      <p>Draw paths to create flowing playlists</p>
+      <p>Add songs to your playlist, and find out how they connect with each other</p>
     </div>
 
     <div class="video-item">
-      <h4>Interactive Playback</h4>
+      <h4>Flow tracks</h4>
       <video controls preload="metadata">
         <source src="docs/start-end-track.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
-      <p>Control playback from the 3D scene</p>
+      <p>Find songs that flow from the start to end</p>
     </div>
   </div>
 
@@ -184,12 +187,9 @@
       textural, and dynamic genes</li>
     <li><strong>Emotional Space Mapping:</strong> 4D coordinate system (valence, energy, complexity, tension) for
       intuitive music understanding</li>
-    <li><strong>Intelligent Playlist Generation:</strong> Interpolated emotional journeys with mathematically optimal
-      transitions</li>
-    <li><strong>Advanced Similarity Detection:</strong> Weighted DNA comparison with musical key detection using
-      Krumhansl–Schmuckler algorithm</li>
-    <li><strong>Interactive 3D Galaxy:</strong> Three.js visualization with bloom effects, raycasting, and real-time
-      connection rendering</li>
+    <li><strong>Intelligent Playlist Generation:</strong> Interpolated emotional journeys from start to finish</li>
+    <li><strong>Advanced Similarity Detection:</strong> Weighted DNA comparison with musical key detection</li>
+    <li><strong>Interactive 3D Galaxy:</strong> Three.js visualization with effects</li>
     <li><strong>Automatic Clustering:</strong> K-Means analysis identifying distinct mood groups across the entire
       library</li>
   </ul>
@@ -197,7 +197,7 @@
   <h3>Technical Implementation</h3>
   <div class="tech-grid">
     <div class="tech-item">
-      <strong>Backend Audio Analysis:</strong> Python + librosa for comprehensive feature extraction, UMAP/t-SNE/PCA for
+      <strong>Backend Audio Analysis:</strong> Python (FastAPI) + librosa for comprehensive feature extraction, UMAP for
       dimensionality reduction
     </div>
     <div class="tech-item">
@@ -266,7 +266,7 @@
   </code>
 
   <h4>3. 3D Semantic Positioning</h4>
-  <p>Dynamic dimensionality reduction combining 61D features into 3D space using UMAP/t-SNE/PCA.</p>
+  <p>Dynamic dimensionality reduction combining 61D features into 3D space using UMAP</p>
 
   <p><strong>Sample 3D Coordinates:</strong></p>
   <code>
@@ -414,12 +414,11 @@
       <h3>Frontend Technical Specification</h3>
 
       <h4>1. 3D Visualization Engine</h4>
-      <p>The frontend's centerpiece is the interactive galaxy visualization, powered by Three.js. Each track renders as
-        a glowing sphere in 3D space.</p>
+      <p>The frontend's is powered by Three.js. Each track renders as a glowing sphere in 3D space.</p>
 
       <p><strong>Advanced Sphere Positioning (Multi-level Fallback System):</strong></p>
       <ul>
-        <li><strong>Backend Coordinates:</strong> Highest priority - exact (x, y, z) from UMAP/t-SNE/PCA</li>
+        <li><strong>Backend Coordinates:</strong> Highest priority - exact (x, y, z) from UMAP</li>
         <li><strong>4D Emotional Mapping:</strong> Maps (valence, energy, complexity, tension) into 3D space</li>
         <li><strong>Legacy DNA Fallback:</strong> Uses older "DNA" features if emotional coordinates missing</li>
         <li><strong>Fibonacci Sphere:</strong> Golden-angle algorithm for even distribution as last resort</li>
@@ -489,13 +488,9 @@
       <ol>
         <li>Install dependencies: <code>pip install -r requirements.txt</code></li>
         <li>Start backend: <code>python backend/api/api_server.py</code></li>
-        <li>Open <code>frontend/index.html</code> in browser</li>
-        <li>Point to your music library and explore</li>
+        <li>Open frontend folder <code>npm i ; npm run dev</code> in terminal</li>
+        <li>Open <code>https://localhost:3000</code> in browser</li>
       </ol>
-
-      <h3>Test Music Library</h3>
-      <p>Curated collection available at: <a href="https://vader.tail96aa.ts.net/">https://vader.tail96aa.ts.net/</a>
-      </p>
 </body>
 
 </html>
