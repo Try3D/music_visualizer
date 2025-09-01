@@ -1,0 +1,76 @@
+/* Basic reset and styling */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Custom range slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-track {
+  background: #B3B3B3;
+  height: 4px;
+  border-radius: 2px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #1DB954;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  background: #1ed760;
+  transform: scale(1.1);
+}
+
+input[type="range"]::-moz-range-track {
+  background: #B3B3B3;
+  height: 4px;
+  border-radius: 2px;
+  border: none;
+}
+
+input[type="range"]::-moz-range-thumb {
+  background: #1DB954;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+/* Button hover effects */
+button:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+#play-pause:hover {
+  background: #1ed760 !important;
+}
+
+#volume-btn:hover {
+  color: #FFFFFF !important;
+}
+
+/* Canvas container */
+#three-container {
+  cursor: grab;
+}
+
+#three-container:active {
+  cursor: grabbing;
+}
