@@ -1,0 +1,925 @@
+MediaServer/music/
+├── Casiopea
+│   ├── CASIOPEA
+│   │   ├── 01 - Time Limit.flac
+│   │   ├── 02 - Tears Of The Star.flac
+│   │   ├── 03 - Space Road.flac
+│   │   ├── 04 - Midnight Rendezvous.flac
+│   │   ├── 05 - Far Away.flac
+│   │   ├── 06 - Swallow.flac
+│   │   ├── 07 - Dream Hill.flac
+│   │   ├── 08 - Black Joke.flac
+│   │   ├── cover.jpg
+│   │   └── errors.txt
+│   ├── Euphony
+│   │   ├── 01 - Taiyo-Fu The Wind From The Sun.flac
+│   │   ├── 02 - Shadow Man.flac
+│   │   ├── 03 - Super Sonic Movement.flac
+│   │   ├── 04 - Inishie Old Times.flac
+│   │   ├── 05 - Bayside Express.flac
+│   │   ├── 06 - Sentimental Avenue.flac
+│   │   ├── 07 - Solid Swing.flac
+│   │   ├── 08 - Hacker.flac
+│   │   ├── 09 - Pure Green.flac
+│   │   ├── 10 - Red Zone.flac
+│   │   ├── 11 - Mei-mu Shallow Dreams.flac
+│   │   ├── 12 - Halle (Live).flac
+│   │   └── cover.jpg
+│   ├── MATERIAL
+│   │   ├── 01 - FREAK JACK.flac
+│   │   ├── 02 - DOWN SOUTH.flac
+│   │   ├── 03 - TWINKLE VISIONS.flac
+│   │   ├── 04 - NATURALLY.flac
+│   │   ├── 05 - THE NIGHT IN BLUE.flac
+│   │   ├── 06 - LONGING.flac
+│   │   ├── 07 - PRECIOUS JOY.flac
+│   │   ├── 08 - LUCKY STARS.flac
+│   │   ├── 09 - PROMENADE.flac
+│   │   ├── 10 - DAY and NIGHT.flac
+│   │   ├── 11 - CITY TALK.flac
+│   │   └── cover.jpg
+│   └── MINT JAMS
+│       ├── 01 - Take Me (Live at Chuo Kaikan Hall, Tokyo, Feb. 1982).flac
+│       ├── 02 - Asayake (Live at Chuo Kaikan Hall, Tokyo, Feb. 1982).flac
+│       ├── 03 - Midnight Rendezvous (Live at Chuo Kaikan Hall, Tokyo, Feb. 1982).flac
+│       ├── 04 - Time Limit (Live at Chuo Kaikan Hall, Tokyo, Feb. 1982).flac
+│       ├── 05 - Domino Line (Live at Chuo Kaikan Hall, Tokyo, Feb. 1982).flac
+│       ├── 06 - Tears Of The Star (Live at Chuo Kaikan Hall, Tokyo, Feb. 1982).flac
+│       ├── 07 - Swear (Live at Chuo Kaikan Hall, Tokyo, Feb. 1982).flac
+│       └── cover.jpg
+├── Coldplay
+│   ├── Ghost Stories (2014)
+│   │   ├── 01 Always in My Head.flac
+│   │   ├── 02 Magic.flac
+│   │   ├── 03 Ink.flac
+│   │   ├── 04 True Love.flac
+│   │   ├── 05 Midnight.flac
+│   │   ├── 06 Another’s Arms.flac
+│   │   ├── 07 Oceans.flac
+│   │   ├── 08 A Sky Full of Stars.flac
+│   │   ├── 09 O.flac
+│   │   ├── album.nfo
+│   │   └── cover.jpg
+│   ├── Moon Music (2024)
+│   │   ├── 01 - MOON MUSiC.flac
+│   │   ├── 02 - feelslikeimfallinginlove.flac
+│   │   ├── 03 - WE PRAY.flac
+│   │   ├── 04 - JUPiTER.flac
+│   │   ├── 05 - GOOD FEELiNGS.flac
+│   │   ├── 06 - ALiEN HiTS_ALiEN RADiO.flac
+│   │   ├── 07 - iAAM.flac
+│   │   ├── 08 - AETERNA.flac
+│   │   ├── 09 - ALL MY LOVE.flac
+│   │   ├── 10 - ONE WORLD.flac
+│   │   └── cover.jpg
+│   ├── Music of the Spheres (2021)
+│   │   ├── 01. ⦵.flac
+│   │   ├── 01. ⦵.lrc
+│   │   ├── 02. Higher Power.flac
+│   │   ├── 02. Higher Power.lrc
+│   │   ├── 03. Humankind.flac
+│   │   ├── 03. Humankind.lrc
+│   │   ├── 04. _✧.flac
+│   │   ├── 05. Let Somebody Go.flac
+│   │   ├── 05. Let Somebody Go.lrc
+│   │   ├── 06. ♡.flac
+│   │   ├── 06. ♡.lrc
+│   │   ├── 07. People of The Pride.flac
+│   │   ├── 07. People of The Pride.lrc
+│   │   ├── 08. Biutyful.flac
+│   │   ├── 08. Biutyful.lrc
+│   │   ├── 09. ❍.flac
+│   │   ├── 09. ❍.lrc
+│   │   ├── 10. My Universe.flac
+│   │   ├── 10. My Universe.lrc
+│   │   ├── 11. ∞.flac
+│   │   ├── 11. ∞.lrc
+│   │   ├── 12. Coloratura.flac
+│   │   ├── 12. Coloratura.lrc
+│   │   └── Front.jpg
+│   └── The Blue Room (1999)
+│       ├── 01 - Bigger Stronger.flac
+│       ├── 01 - Bigger Stronger.lrc
+│       ├── 02 - Don't Panic.flac
+│       ├── 02 - Don’t Panic.lrc
+│       ├── 03 - See You Soon.flac
+│       ├── 03 - See You Soon.lrc
+│       ├── 04 - High Speed.flac
+│       ├── 04 - High Speed.lrc
+│       ├── 05 - Such a Rush.flac
+│       ├── 05 - Such a Rush.lrc
+│       └── album.nfo
+├── Daft Punk
+│   ├── Discovery
+│   │   ├── 01. One More Time.flac
+│   │   ├── 02. Aerodynamic.flac
+│   │   ├── 03. Digital Love.flac
+│   │   ├── 04. Harder, Better, Faster, Stronger.flac
+│   │   ├── 05. Crescendolls.flac
+│   │   ├── 06. Nightvision.flac
+│   │   ├── 07. Superheroes.flac
+│   │   ├── 08. High Life.flac
+│   │   ├── 09. Something About Us.flac
+│   │   ├── 10. Voyager.flac
+│   │   ├── 11. Veridis Quo.flac
+│   │   ├── 12. Short Circuit.flac
+│   │   ├── 13. Face to Face.flac
+│   │   ├── 14. Too Long.flac
+│   │   └── cover.jpg
+│   └── Random Access Memories
+│       ├── 10. Motherboard.flac
+│       ├── 11. Fragments of Time.flac
+│       ├── 12. Doin’ It Right.flac
+│       ├── 13. Contact.flac
+│       ├── 1. Give Life Back to Music.flac
+│       ├── 2. The Game of Love.flac
+│       ├── 3. Giorgio by Moroder.flac
+│       ├── 4. Within.flac
+│       ├── 5. Instant Crush.flac
+│       ├── 6. Lose Yourself to Dance.flac
+│       ├── 7. Touch.flac
+│       ├── 8. Get Lucky.flac
+│       └── 9. Beyond.flac
+├── Duran Duran
+│   └── Duran Duran - Rio (Collectors Edition)
+│       ├── 101. Rio.flac
+│       ├── 102. My Own Way.flac
+│       ├── 103. Lonely In Your Nightmare.flac
+│       ├── 104. Hungry Like The Wolf.flac
+│       ├── 105. Hold Back The Rain.flac
+│       ├── 106. New Religion.flac
+│       ├── 107. Last Chance On The Stairway.flac
+│       ├── 108. Save A Prayer.flac
+│       ├── 109. The Chauffeur.flac
+│       ├── 110. Rio (US Album Remix).flac
+│       ├── 111. My Own Way (Carnival Remix).flac
+│       ├── 112. Lonely In Your Nightmare (US Album Remix).flac
+│       ├── 113. Hungry Like The Wolf (US Album Remix).flac
+│       ├── 114. Hold Back The Rain (US Album Remix).flac
+│       ├── 201. Last Chance On The Stairway (Demo).flac
+│       ├── 202. My Own Way (Demo).flac
+│       ├── 203. New Religion (Demo).flac
+│       ├── 204. Like An Angel (Demo).flac
+│       ├── 205. My Own Way (Original 7'').flac
+│       ├── 206. Like An Angel (B-Side).flac
+│       ├── 207. Careless Memories (Live).flac
+│       ├── 208. The Chauffeur (Blue Silver) (Early Version).flac
+│       ├── 209. My Own Way (Night Version).flac
+│       ├── 210. Hungry Like The Wolf (Night Version).flac
+│       ├── 211. Rio (Night Version).flac
+│       ├── 212. New Religion (Carnival Remix).flac
+│       ├── 213. Hold Back The Rain (Carnival Remix).flac
+│       └── cover.jpg
+├── Harry Styles
+│   └── Harry's House (2022)
+│       ├── 01. Music For a Sushi Restaurant.flac
+│       ├── 01. Music For a Sushi Restaurant.lrc
+│       ├── 02. Late Night Talking.flac
+│       ├── 02. Late Night Talking.lrc
+│       ├── 03. Grapejuice.flac
+│       ├── 03. Grapejuice.lrc
+│       ├── 04. As It Was.flac
+│       ├── 04. As It Was.lrc
+│       ├── 05. Daylight.flac
+│       ├── 05. Daylight.lrc
+│       ├── 06. Little Freak.flac
+│       ├── 06. Little Freak.lrc
+│       ├── 07. Matilda.flac
+│       ├── 07. Matilda.lrc
+│       ├── 08. Cinema.flac
+│       ├── 08. Cinema.lrc
+│       ├── 09. Daydreaming.flac
+│       ├── 09. Daydreaming.lrc
+│       ├── 10. Keep Driving.flac
+│       ├── 10. Keep Driving.lrc
+│       ├── 11. Satellite.flac
+│       ├── 11. Satellite.lrc
+│       ├── 12. Boyfriends.flac
+│       ├── 12. Boyfriends.lrc
+│       ├── 13. Love Of My Life.flac
+│       ├── 13. Love Of My Life.lrc
+│       └── cover.jpg
+├── Himiko Kikuchi
+│   └── Flying Beagle (1987)
+│       ├── 01 - Look Your Back!.flac
+│       ├── 02 - A Seagull & Clouds.flac
+│       ├── 03 - Flying Beagle.flac
+│       ├── 04 - Fluffy.flac
+│       ├── 05 - Sand Storm.flac
+│       ├── 06 - Baby Talk.flac
+│       ├── 07 - The Second Summer.flac
+│       ├── 08 - Ducky Ducky.flac
+│       └── albumart.jpg
+├── Hozier
+│   └── Hozier (Expanded Edition)
+│       ├── 01. Take Me to Church.flac
+│       ├── 02. Angel of Small Death and the Codeine Scene.flac
+│       ├── 03. Jackie and Wilson.flac
+│       ├── 04. Someone New.flac
+│       ├── 05. To Be Alone.flac
+│       ├── 06. From Eden.flac
+│       ├── 07. In a Week.flac
+│       ├── 08. Sedated.flac
+│       ├── 09. Work Song.flac
+│       ├── 10. Like Real People Do.flac
+│       ├── 11. It Will Come Back.flac
+│       ├── 12. Foreigner's God.flac
+│       ├── 13. Cherry Wine (Live).flac
+│       ├── 14. In the Woods Somewhere.flac
+│       ├── 15. Run.flac
+│       └── cover.jpg
+├── John Mayer
+│   ├── Any Given Thursday (2003)
+│   │   ├── 01 3x5.flac
+│   │   ├── 02 No Such Thing.flac
+│   │   ├── 03 Back to You.flac
+│   │   ├── 04 City Love.flac
+│   │   ├── 05 Something's Missing.flac
+│   │   ├── 06 Lenny _ Man on the Side.flac
+│   │   ├── 07 Message in a Bottle.flac
+│   │   ├── 08 Love Song for No One.flac
+│   │   ├── 09 Why Georgia.flac
+│   │   ├── 10 Your Body Is a Wonderland.flac
+│   │   ├── 11 My Stupid Mouth.flac
+│   │   ├── 12 Covered in Rain.flac
+│   │   ├── 13 83.flac
+│   │   ├── 14 Comfortable.flac
+│   │   ├── 15 Neon.flac
+│   │   ├── cover.1.jpg
+│   │   └── cover.jpg
+│   ├── As-Is - Live (2004)
+│   │   ├── 101. Only Heart.flac
+│   │   ├── 102. My Stupid Mouth.flac
+│   │   ├── 103. No Such Thing.flac
+│   │   ├── 104. Covered in Rain.flac
+│   │   ├── 105. Split Screen Sadness.flac
+│   │   ├── 106. Blues Intro.flac
+│   │   ├── 107. Come Back to Bed.flac
+│   │   ├── 201. Your Body Is a Wonderland.flac
+│   │   ├── 202. Something's Missing.flac
+│   │   ├── 203. Inner City Blues (Make Me Wanna Holler).flac
+│   │   ├── 204. Clarity.flac
+│   │   ├── 205. 3x5.flac
+│   │   ├── 206. Home Life.flac
+│   │   ├── 207. Comfortable.flac
+│   │   └── 208. Neon.flac
+│   ├── Battle Studies (2009)
+│   │   ├── 01 Heartbreak Warfare.flac
+│   │   ├── 01 Heartbreak Warfare.lrc
+│   │   ├── 02 All We Ever Do is Say Goodbye.flac
+│   │   ├── 02 All We Ever Do is Say Goodbye.lrc
+│   │   ├── 03 Half of My Heart.flac
+│   │   ├── 03 Half of My Heart.lrc
+│   │   ├── 04 Who Says.flac
+│   │   ├── 04 Who Says.lrc
+│   │   ├── 05 Perfectly Lonely.flac
+│   │   ├── 05 Perfectly Lonely.lrc
+│   │   ├── 06 Assassin.flac
+│   │   ├── 06 Assassin.lrc
+│   │   ├── 07 Crossroads.flac
+│   │   ├── 07 Crossroads.lrc
+│   │   ├── 08 War of My Life.flac
+│   │   ├── 08 War of My Life.lrc
+│   │   ├── 09 Edge of Desire.flac
+│   │   ├── 09 Edge of Desire.lrc
+│   │   ├── 10 Do You Know Me.flac
+│   │   ├── 10 Do You Know Me.lrc
+│   │   ├── 11 Friends, Lovers or Nothing.flac
+│   │   ├── 11 Friends, Lovers or Nothing.lrc
+│   │   └── folder.jpg
+│   ├── Continuum (2006)
+│   │   ├── 01. Waiting On The World To Change.flac
+│   │   ├── 02. I Don't Trust Myself (With Loving You).flac
+│   │   ├── 03. Belief.flac
+│   │   ├── 04. Gravity.flac
+│   │   ├── 05. The Heart Of Life.flac
+│   │   ├── 06. Vultures.flac
+│   │   ├── 07. Stop This Train.flac
+│   │   ├── 08. Slow Dancing In A Burning Room.flac
+│   │   ├── 09. Bold As Love.flac
+│   │   ├── 10. Dreaming With A Broken Heart.flac
+│   │   ├── 11. In Repair.flac
+│   │   ├── 12. I'm Gonna Find Another You.flac
+│   │   └── cover.jpg
+│   ├── Heavier Things (2003)
+│   │   ├── 01. John Mayer - Clarity.flac
+│   │   ├── 01. John Mayer - Clarity.lrc
+│   │   ├── 02. John Mayer - Bigger Than My Body.flac
+│   │   ├── 02. John Mayer - Bigger Than My Body.lrc
+│   │   ├── 03. John Mayer - Something's Missing.flac
+│   │   ├── 03. John Mayer - Something's Missing.lrc
+│   │   ├── 04. John Mayer - New Deep.flac
+│   │   ├── 04. John Mayer - New Deep.lrc
+│   │   ├── 05. John Mayer - Come Back To Bed.flac
+│   │   ├── 05. John Mayer - Come Back To Bed.lrc
+│   │   ├── 06. John Mayer - Home Life.flac
+│   │   ├── 06. John Mayer - Home Life.lrc
+│   │   ├── 07. John Mayer - Split Screen Sadness.flac
+│   │   ├── 07. John Mayer - Split Screen Sadness.lrc
+│   │   ├── 08. John Mayer - Daughters.flac
+│   │   ├── 08. John Mayer - Daughters.lrc
+│   │   ├── 09. John Mayer - Only Heart.flac
+│   │   ├── 09. John Mayer - Only Heart.lrc
+│   │   ├── 10. John Mayer - Wheel.flac
+│   │   ├── 10. John Mayer - Wheel.lrc
+│   │   └── albumart.jpg
+│   ├── Paradise Valley (2013)
+│   │   ├── 01. John Mayer - Wildfire.flac
+│   │   ├── 02. John Mayer - Dear Marie.flac
+│   │   ├── 03. John Mayer - Waitin' On The Day.flac
+│   │   ├── 04. John Mayer - Paper Doll.flac
+│   │   ├── 05. John Mayer - Call Me The Breeze.flac
+│   │   ├── 06. John Mayer - Who You Love.flac
+│   │   ├── 07. John Mayer - I Will Be Found (Lost At Sea).flac
+│   │   ├── 08. John Mayer - Wildfire.flac
+│   │   ├── 09. John Mayer - You're No One 'Til Someone Lets You Down.flac
+│   │   ├── 10. John Mayer - Badge And Gun.flac
+│   │   ├── 11. John Mayer - On The Way Home.flac
+│   │   └── cover.jpg
+│   ├── Room For Squares (2001)
+│   │   ├── 01 - No Such Thing.flac
+│   │   ├── 01 - No Such Thing.lrc
+│   │   ├── 02 - Why Georgia.flac
+│   │   ├── 02 - Why Georgia.lrc
+│   │   ├── 03 - My Stupid Mouth.flac
+│   │   ├── 03 - My Stupid Mouth.lrc
+│   │   ├── 04 - Your Body Is a Wonderland.flac
+│   │   ├── 04 - Your Body Is a Wonderland.lrc
+│   │   ├── 05 - Neon.flac
+│   │   ├── 06 - City Love.flac
+│   │   ├── 06 - City Love.lrc
+│   │   ├── 07 - 83.flac
+│   │   ├── 07 - 83.lrc
+│   │   ├── 08 - 3x5.flac
+│   │   ├── 09 - Love Song for No One.flac
+│   │   ├── 09 - Love Song for No One.lrc
+│   │   ├── 10 - Back to You.flac
+│   │   ├── 10 - Back to You.lrc
+│   │   ├── 11 - Great Indoors.flac
+│   │   ├── 11 - Great Indoors.lrc
+│   │   ├── 12 - Not Myself.flac
+│   │   ├── 14 - St. Patrick's Day.flac
+│   │   ├── 14 - St. Patrick's Day.lrc
+│   │   └── folder.jpg
+│   ├── Sob Rock (2021)
+│   │   ├── 01. Last Train Home.flac
+│   │   ├── 02. Shouldn't Matter but It Does.flac
+│   │   ├── 03. New Light.flac
+│   │   ├── 04. Why You No Love Me.flac
+│   │   ├── 05. Wild Blue.flac
+│   │   ├── 06. Shot in the Dark.flac
+│   │   ├── 07. I Guess I Just Feel Like.flac
+│   │   ├── 08. Til the Right One Comes.flac
+│   │   ├── 09. Carry Me Away.flac
+│   │   ├── 10. All I Want Is to Be With You.flac
+│   │   └── cover.jpg
+│   ├── The Search for Everything (2017)
+│   │   ├── 01 - Still Feel Like Your Man.flac
+│   │   ├── 02 - Emoji of a Wave.flac
+│   │   ├── 03 - Helpless.flac
+│   │   ├── 04 - Love on the Weekend.flac
+│   │   ├── 05 - In the Blood.flac
+│   │   ├── 06 - Changing.flac
+│   │   ├── 07 - Theme From “The Search for Everything”.flac
+│   │   ├── 08 - Moving On and Getting Over.flac
+│   │   ├── 09 - Never on the Day You Leave.flac
+│   │   ├── 10 - Rosie.flac
+│   │   ├── 11 - Roll It On Home.flac
+│   │   ├── 12 - You’re Gonna Live Forever in Me.flac
+│   │   └── cover.jpg
+│   └── Where The Light Is (2008)
+│       ├── 101 - Neon.flac
+│       ├── 102 - Stop This Train.flac
+│       ├── 103 - In Your Atmosphere.flac
+│       ├── 104 - Daughters.flac
+│       ├── 105 - Free Fallin'.flac
+│       ├── 106 - Everyday I Have the Blues.flac
+│       ├── 107 - Wait Until Tomorrow.flac
+│       ├── 108 - Who Did You Think I Was.flac
+│       ├── 109 - Come When I Call.flac
+│       ├── 110 - Good Love Is on the Way.flac
+│       ├── 111 - Out of My Mind.flac
+│       ├── 112 - Vultures.flac
+│       ├── 113 - Bold as Love.flac
+│       ├── 201 - Waiting on the World to Change.flac
+│       ├── 202 - Slow Dancing in a Burning Room.flac
+│       ├── 203 - Why Georgia.flac
+│       ├── 204 - The Heart of Life.flac
+│       ├── 205 - I Don't Need No Doctor.flac
+│       ├── 206 - Gravity.flac
+│       ├── 207 - I Don't Trust Myself (With Loving You).flac
+│       ├── 208 - Belief.flac
+│       ├── 209 - I'm Gonna Find Another You.flac
+│       └── cover.jpg
+├── Jun Fukamachi
+│   └── On The Move (1978)
+│       ├── 01 - On the Move.flac
+│       ├── 02 - You're Sorry.flac
+│       ├── 03 - Letter to New York.flac
+│       ├── 04 - Departure in the Dark.flac
+│       ├── 05 - Dance of Paranoia Op.2.flac
+│       ├── 06 - When I Got Your Wave 'Pathetique'.flac
+│       ├── 07 - Early Evening Lullaby.flac
+│       ├── 08 - Departure in the Dark (Again).flac
+│       ├── folder.jpg
+│       └── On the Move.accurip
+├── Justin Hurwitz
+│   └── La La Land [Original Motion Picture Soundtrack]
+│       ├── 01. La La Land Cast - Another Day of Sun.flac
+│       ├── 02. Emma Stone, Callie Hernandez, Sonoya Mizuno & Jessica Rothe - Someone in the Crowd.flac
+│       ├── 03. Justin Hurwitz - Mia & Sebastian's Theme.flac
+│       ├── 04. Ryan Gosling & Emma Stone - A Lovely Night.flac
+│       ├── 05. Justin Hurwitz - Herman's Habit.flac
+│       ├── 06. Ryan Gosling - City of Stars.flac
+│       ├── 07. Justin Hurwitz - Planetarium.flac
+│       ├── 08. Justin Hurwitz - Summer Montage – Madeline.flac
+│       ├── 09. Ryan Gosling & Emma Stone - City of Stars.flac
+│       ├── 10. John Legend - Start a Fire.flac
+│       ├── 11. Justin Hurwitz - Engagement Party.flac
+│       ├── 12. Emma Stone - Audition (The Fools Who Dream).flac
+│       ├── 13. Justin Hurwitz - Epilogue.flac
+│       ├── 14. Justin Hurwitz - The End.flac
+│       ├── 15. Justin Hurwitz - City of Stars (Humming) [feat. Emma Stone].flac
+│       ├── folder.jpg
+│       └── foo_dr.txt
+├── Kavinsky
+│   └── OutRun (2013)
+│       ├── 10. Grand Canyon.flac
+│       ├── 11. First Blood.flac
+│       ├── 12. Roadgame.flac
+│       ├── 13. Endless.flac
+│       ├── 1. Prelude.flac
+│       ├── 2. Blizzard.flac
+│       ├── 3. ProtoVision.flac
+│       ├── 4. Odd Look.flac
+│       ├── 5. Rampage.flac
+│       ├── 6. Suburbia.flac
+│       ├── 7. Testarossa Autodrive.flac
+│       ├── 8. Nightcall.flac
+│       ├── 9. Deadcruiser.flac
+│       ├── Booklet.pdf
+│       ├── cover.jpg
+│       └── description.txt
+├── Kessoku Band
+│   ├── Kessoku Band
+│   │   ├── 01. seisyun complex.flac
+│   │   ├── 01. seisyun complex.lrc
+│   │   ├── 02. hitoribocchi tokyo.flac
+│   │   ├── 02. hitoribocchi tokyo.lrc
+│   │   ├── 03. Distortion!!.flac
+│   │   ├── 03. Distortion!!.lrc
+│   │   ├── 04. Secret Base.flac
+│   │   ├── 04. Secret Base.lrc
+│   │   ├── 05. Guitar, Loneliness and Blue Planet.flac
+│   │   ├── 05. Guitar, Loneliness and Blue Planet.lrc
+│   │   ├── 06. I can't sing a love song.flac
+│   │   ├── 06. I can't sing a love song.lrc
+│   │   ├── 07. That band.flac
+│   │   ├── 07. That band.lrc
+│   │   ├── 08. Karakara.flac
+│   │   ├── 08. Karakara.lrc
+│   │   ├── 09. The Little Sea.flac
+│   │   ├── 09. The Little Sea.lrc
+│   │   ├── 10. What is wrong with.flac
+│   │   ├── 10. What is wrong with.lrc
+│   │   ├── 11. Never forget.flac
+│   │   ├── 11. Never forget.lrc
+│   │   ├── 12. If I could be a constellation.flac
+│   │   ├── 12. If I could be a constellation.lrc
+│   │   ├── 13. Flashbacker.flac
+│   │   ├── 13. Flashbacker.lrc
+│   │   ├── 14. Rockn' Roll, Morning Light Falls on You.flac
+│   │   └── Cover.jpg
+│   ├── Re：結束バンド
+│   │   ├── 01. 月並みに輝け.flac
+│   │   ├── 02. 今、僕、アンダーグラウンドから.flac
+│   │   ├── 03. ドッペルゲンガー.flac
+│   │   ├── 04. 僕と三原色.flac
+│   │   ├── 05. 秒針少女.flac
+│   │   ├── 06. Re：Re：.flac
+│   │   ├── Cover.jpg
+│   │   └── Music Download.txt
+│   ├── We Will (2024)
+│   │   ├── 01.milky way.flac
+│   │   ├── 02.惑う星.flac
+│   │   ├── 03.UNITE.flac
+│   │   └── 04.夢を束ねて.flac
+│   └── 光の中へ
+│       ├── 01.光の中へ.flac
+│       ├── 02.青い春と西の空.flac
+│       ├── 03.光の中へ-instrumental-.flac
+│       ├── 04.青い春と西の空-instrumental-.flac
+│       └── COVER.jpg
+├── Laufey
+│   ├── A Night at the Symphony (2023)
+│   │   ├── 01 - Fragile.flac
+│   │   ├── 02 - Valentine.flac
+│   │   ├── 03 - Dear Soulmate.flac
+│   │   ├── 04 - I Wish You Love.flac
+│   │   ├── 05 - Night Light.flac
+│   │   ├── 06 - Ég veit þú kemur.flac
+│   │   ├── 07 - Falling Behind.flac
+│   │   ├── 08 - Best Friend.flac
+│   │   ├── 09 - Like the Movies.flac
+│   │   ├── 10 - The Nearness of You.flac
+│   │   ├── 11 - Let You Break My Heart Again.flac
+│   │   ├── 12 - What Love Will Do to You.flac
+│   │   ├── 13 - Beautiful Stranger.flac
+│   │   └── 14 - Every Time We Say Goodbye.flac
+│   ├── Bewitched (2023)
+│   │   ├── 01 - Dreamer.flac
+│   │   ├── 02 - Second Best.flac
+│   │   ├── 03 - Haunted.flac
+│   │   ├── 04 - Must Be Love.flac
+│   │   ├── 05 - While You Were Sleeping.flac
+│   │   ├── 06 - Lovesick.flac
+│   │   ├── 07 - California and Me.flac
+│   │   ├── 08 - Nocturne (Interlude).flac
+│   │   ├── 09 - Promise.flac
+│   │   ├── 10 - From The Start.flac
+│   │   ├── 11 - Misty.flac
+│   │   ├── 12 - Serendipity.flac
+│   │   ├── 13 - Letter To My 13 Year Old Self.flac
+│   │   └── 14 - Bewitched.flac
+│   └── Everything I Know About Love  (Deluxe Edition) (2022)
+│       ├── 01. Laufey - Fragile.flac
+│       ├── 02. Laufey - Beautiful Stranger.flac
+│       ├── 03. Laufey - Valentine.flac
+│       ├── 04. Laufey - Above The Chinese Restaurant.flac
+│       ├── 05. Laufey - Dear Soulmate.flac
+│       ├── 06. Laufey - What Love Will Do to You.flac
+│       ├── 07. Laufey - I've Never Been In Love Before.flac
+│       ├── 08. Laufey - Just Like Chet.flac
+│       ├── 09. Laufey - Everything I Know About Love.flac
+│       ├── 10. Laufey - Falling Behind.flac
+│       ├── 11. Laufey - Hi.flac
+│       ├── 12. Laufey - Dance With You Tonight.flac
+│       ├── 13. Laufey - Night Light.flac
+│       ├── 14. Laufey - Slow Down.flac
+│       ├── 15. Laufey - Lucky for Me.flac
+│       ├── 16. Laufey - Questions For The Universe.flac
+│       └── cover.jpg
+├── Masayoshi Takanaka
+│   └── (1979) All Of Me
+│       ├── 01 - Oh! Tengo Suerte.flac
+│       ├── 02 - Tokyo Reggy.flac
+│       ├── 03 - Sweet Agnes.flac
+│       ├── 04 - Akogareno Seychelles Shoto (Seychelles Islands).flac
+│       ├── 05 - I Remember You.flac
+│       ├── 06 - Izu Amantsu Nato Uri (Citron Vender).flac
+│       ├── 07 - Tropic Birds.flac
+│       ├── 08 - Brasilian Skies.flac
+│       ├── 09 - Mambo No. 5.flac
+│       ├── 10 - E.S.P..flac
+│       ├── 11 - Star Wars Samba.flac
+│       ├── 12 - Sexy Dance.flac
+│       ├── 13 - Malibu.flac
+│       ├── 14 - Ready to Fly.flac
+│       ├── All Of Me.cue
+│       ├── folder.jpg
+│       ├── Masayoshi Takanaka - All Of Me.log
+│       └── Masayoshi Takanaka - All Of Me.m3u
+├── Metro Boomin
+│   └── METRO BOOMIN PRESENTS SPIDER-MAN ACROSS THE SPIDER-VERSE (SOUNDTRACK FROM AND INSPIRED BY THE MOTION PICTURE)
+│       ├── 01. Annihilate.flac
+│       ├── 02. Am I Dreaming.flac
+│       ├── 03. All The Way Live.flac
+│       ├── 04. Danger (Spider).flac
+│       ├── 05. Hummingbird.flac
+│       ├── 06. Calling.flac
+│       ├── 07. Silk And Cologne (Spider-Verse Remix).flac
+│       ├── 08. Link Up (Spider-Verse Remix).flac
+│       ├── 09. Self Love.flac
+│       ├── 10. Home.flac
+│       ├── 11. Nonviolent Communication.flac
+│       ├── 12. Givin' Up (Not The One).flac
+│       ├── 13. Nas Morales.flac
+│       └── cover.jpg
+├── Mitski
+│   ├── Lush (2012)
+│   │   ├── 1. Mitski - Liquid Smooth.flac
+│   │   ├── 2. Mitski - Wife.flac
+│   │   ├── 3. Mitski - Abbey.flac
+│   │   ├── 4. Mitski - Brand New City.flac
+│   │   ├── 5. Mitski - Eric.flac
+│   │   ├── 6. Mitski - Bag of Bones.flac
+│   │   ├── 7. Mitski - Door.flac
+│   │   ├── 8. Mitski - Pearl Diver.flac
+│   │   ├── 9. Mitski - Real Men.flac
+│   │   └── cover.jpg
+│   └── The Land Is Inhospitable and So Are We
+│       ├── 01. Bug Like an Angel.flac
+│       ├── 02. Buffalo Replaced.flac
+│       ├── 03. Heaven.flac
+│       ├── 04. I Dont Like My Mind.flac
+│       ├── 05. The Deal.flac
+│       ├── 06. When Memories Snow.flac
+│       ├── 07. My Love Mine All Mine.flac
+│       ├── 08. The Frost.flac
+│       ├── 09. Star.flac
+│       ├── 10. Im Your Man.flac
+│       ├── 11. I Love Me After You.flac
+│       └── cover.jpg
+├── Novo Amor
+│   └── Cannot Be, Whatsoever (2020)
+│       ├── 01. Opaline.flac
+│       ├── 01. Opaline.lrc
+│       ├── 02. I Feel Better.flac
+│       ├── 02. I Feel Better.lrc
+│       ├── 03. Decimal.flac
+│       ├── 03. Decimal.lrc
+│       ├── 04. No Plans.flac
+│       ├── 04. No Plans.lrc
+│       ├── 05. Birdcage.flac
+│       ├── 05. Birdcage.lrc
+│       ├── 06. Keep Me.flac
+│       ├── 06. Keep Me.lrc
+│       ├── 07. Halloween.flac
+│       ├── 07. Halloween.lrc
+│       ├── 08. Statue Of A Woman.flac
+│       ├── 09. If We're Being Honest.flac
+│       ├── 09. If We're Being Honest.lrc
+│       ├── 10. Guestbook.flac
+│       ├── 10. Guestbook.lrc
+│       └── cover.jpg
+├── Pakshee
+│   ├── FightFlight (2024)
+│   │   ├── 1. Pakshee - Vanam.flac
+│   │   ├── 2. Pakshee - Dhuaan.flac
+│   │   ├── 3. Pakshee - Pinjara.flac
+│   │   ├── 4. Pakshee - Rosh.flac
+│   │   └── cover.jpg
+│   └── Pakshee
+│       ├── 1. Raah Piya.flac
+│       ├── 2. Ang.flac
+│       ├── 3. Kyun.flac
+│       ├── 4. Jogi.flac
+│       ├── 5. Kosh.flac
+│       ├── 6. Raanjhan.flac
+│       ├── 7. Balma.flac
+│       └── cover.jpg
+├── Sekito Shigeo
+│   └── 華麗なるエレクトーン −ザ・ワード− (1975)
+│       ├── 01. カーリーとキャロル.flac
+│       ├── 02. ハピネス.flac
+│       ├── 03. マスカレード.flac
+│       ├── 04. あまい囁き.flac
+│       ├── 05. 青い影.flac
+│       ├── 06. イエスタディ.flac
+│       ├── 07. ザ・ワードI.flac
+│       ├── 08. ザ・ワードII.flac
+│       ├── 09. ブルー・レディに赤いバラ.flac
+│       ├── 10. ファニー.flac
+│       ├── 11. ブルー・スター.flac
+│       ├── 12. シェアー・ザ・ジョイ(「失われた地平線」から).flac
+│       └── Cover.jpg
+├── Sleep Token
+│   ├── Even In Arcadia (Explicit)
+│   │   ├── 01. Look To Windward.flac
+│   │   ├── 01. Look To Windward.lrc
+│   │   ├── 02. Emergence.flac
+│   │   ├── 02. Emergence.lrc
+│   │   ├── 03. Past Self.flac
+│   │   ├── 03. Past Self.lrc
+│   │   ├── 04. Dangerous.flac
+│   │   ├── 04. Dangerous.lrc
+│   │   ├── 05. Caramel.flac
+│   │   ├── 05. Caramel.lrc
+│   │   ├── 06. Even In Arcadia.flac
+│   │   ├── 06. Even In Arcadia.lrc
+│   │   ├── 07. Provider.flac
+│   │   ├── 07. Provider.lrc
+│   │   ├── 08. Damocles.flac
+│   │   ├── 08. Damocles.lrc
+│   │   ├── 09. Gethsemane.flac
+│   │   ├── 09. Gethsemane.lrc
+│   │   ├── 10. Infinite Baths.flac
+│   │   ├── 10. Infinite Baths.lrc
+│   │   └── cover.jpg
+│   ├── Hey Ya (2018)
+│   │   ├── 01. Hey Ya.flac
+│   │   └── cover.jpg
+│   ├── One (2018)
+│   │   ├── 01 - Sleep Token - Thread the Needle.flac
+│   │   ├── 01 - Sleep Token - Thread the Needle.lrc
+│   │   ├── 02 - Sleep Token - Fields of Elation.flac
+│   │   ├── 02 - Sleep Token - Fields of Elation.lrc
+│   │   ├── 03 - Sleep Token - When the Bough Breaks.flac
+│   │   ├── 03 - Sleep Token - When the Bough Breaks.lrc
+│   │   ├── AlbumArtSmall.jpg
+│   │   ├── AlbumInfo.txt
+│   │   ├── cover.jpg
+│   │   └── Folder.jpg
+│   ├── Sundowning (Deluxe) (2019)
+│   │   ├── 01. The Night Does Not Belong To God.flac
+│   │   ├── 01. The Night Does Not Belong To God.lrc
+│   │   ├── 02. The Offering.flac
+│   │   ├── 02. The Offering.lrc
+│   │   ├── 03. Levitate.flac
+│   │   ├── 03. Levitate.lrc
+│   │   ├── 04. Dark Signs.flac
+│   │   ├── 04. Dark Signs.lrc
+│   │   ├── 05. Higher.flac
+│   │   ├── 05. Higher.lrc
+│   │   ├── 06. Take Aim.flac
+│   │   ├── 06. Take Aim.lrc
+│   │   ├── 07. Give.flac
+│   │   ├── 07. Give.lrc
+│   │   ├── 08. Gods(Explicit).lrc
+│   │   ├── 08. Gods.flac
+│   │   ├── 09. Sugar.flac
+│   │   ├── 09. Sugar.lrc
+│   │   ├── 10. Say That You Will.flac
+│   │   ├── 10. Say That You Will.lrc
+│   │   ├── 11. Drag Me Under.flac
+│   │   ├── 11. Drag Me Under.lrc
+│   │   ├── 12. Blood Sport.flac
+│   │   ├── 12. Blood Sport.lrc
+│   │   ├── 13. Blood Sport (from the room below).flac
+│   │   ├── 13. Blood Sport (from the room below).lrc
+│   │   ├── 14. Shelter (from the room below).flac
+│   │   ├── 14. Shelter (from the room below).lrc
+│   │   ├── 15. When The Party's Over (from the room below).flac
+│   │   ├── 15. When The Party's Over (from the room below).lrc
+│   │   ├── 16. I Wanna Dance With Somebody (from the room below).flac
+│   │   ├── 16. I Wanna Dance With Somebody (from the room below).lrc
+│   │   └── cover.jpg
+│   ├── Take Me Back To Eden
+│   │   ├── 01. Chokehold.flac
+│   │   ├── 01. Chokehold.lrc
+│   │   ├── 02. The Summoning.flac
+│   │   ├── 02. The Summoning.lrc
+│   │   ├── 03. Granite.flac
+│   │   ├── 03. Granite.lrc
+│   │   ├── 04. Aqua Regia.flac
+│   │   ├── 04. Aqua Regia.lrc
+│   │   ├── 05. Vore.flac
+│   │   ├── 05. Vore.lrc
+│   │   ├── 06. Ascensionism.flac
+│   │   ├── 07. Are You Really Okay.flac
+│   │   ├── 08. The Apparition.flac
+│   │   ├── 08. The Apparition.lrc
+│   │   ├── 09. DYWTYLM.flac
+│   │   ├── 09. DYWTYLM.lrc
+│   │   ├── 10. Rain.flac
+│   │   ├── 10. Rain.lrc
+│   │   ├── 11. Take Me Back to Eden.flac
+│   │   ├── 12. Euclid.flac
+│   │   └── 12. Euclid.lrc
+│   ├── This Place Will Become Your Tomb
+│   │   ├── 01. Atlantic.flac
+│   │   ├── 01. Atlantic.lrc
+│   │   ├── 02. Hypnosis.flac
+│   │   ├── 02. Hypnosis.lrc
+│   │   ├── 03. Mine.flac
+│   │   ├── 03. Mine.lrc
+│   │   ├── 04. Like That.flac
+│   │   ├── 04. Like That.lrc
+│   │   ├── 05. The Love You Want.flac
+│   │   ├── 05. The Love You Want.lrc
+│   │   ├── 06. Fall For Me.flac
+│   │   ├── 06. Fall For Me.lrc
+│   │   ├── 07. Alkaline.flac
+│   │   ├── 07. Alkaline.lrc
+│   │   ├── 08. Distraction.flac
+│   │   ├── 08. Distraction.lrc
+│   │   ├── 09. Descending.flac
+│   │   ├── 09. Descending.lrc
+│   │   ├── 10. Telomeres.flac
+│   │   ├── 10. Telomeres.lrc
+│   │   ├── 11. High Water.flac
+│   │   ├── 11. High Water.lrc
+│   │   ├── 12. Missing Limbs.flac
+│   │   ├── 12. Missing Limbs.lrc
+│   │   └── cover.jpg
+│   ├── This Place Will Become Your Tomb (Instrumental) (2021)
+│   │   ├── 01. Atlantic.flac
+│   │   ├── 02. Hypnosis.flac
+│   │   ├── 03. Mine.flac
+│   │   ├── 04. Like That.flac
+│   │   ├── 05. The Love You Want.flac
+│   │   ├── 06. Alkaline.flac
+│   │   ├── 07. Distraction.flac
+│   │   ├── 08. Descending.flac
+│   │   ├── 09. Telomeres.flac
+│   │   ├── 10. High Water.flac
+│   │   └── cover.jpg
+│   └── Two (2017)
+│       ├── 01 - Sleep Token - Calcutta.flac
+│       ├── 01 - Sleep Token - Calcutta.lrc
+│       ├── 02 - Sleep Token - Nazareth(Explicit).flac
+│       ├── 02 - Sleep Token - Nazareth(Explicit).lrc
+│       ├── 03 - Sleep Token - Jericho.flac
+│       ├── 03 - Sleep Token - Jericho.lrc
+│       ├── AlbumArtSmall.jpg
+│       ├── AlbumInfo.txt
+│       ├── cover.jpg
+│       └── Folder.jpg
+├── Tame Impala
+│   └── Currents (2015)
+│       ├── 01. Tame Impala - Let It Happen.flac
+│       ├── 02. Tame Impala - Nangs.flac
+│       ├── 03. Tame Impala - The Moment.flac
+│       ├── 04. Tame Impala - Yes I'm Changing.flac
+│       ├── 05. Tame Impala - Eventually.flac
+│       ├── 06. Tame Impala - Gossip.flac
+│       ├── 07. Tame Impala - The Less I Know The Better.flac
+│       ├── 08. Tame Impala - Past Life.flac
+│       ├── 09. Tame Impala - Disciples.flac
+│       ├── 10. Tame Impala - 'Cause I'm A Man.flac
+│       ├── 11. Tame Impala - Reality In Motion.flac
+│       ├── 12. Tame Impala - Love Paranoia.flac
+│       ├── 13. Tame Impala - New Person, Same Old Mistakes.flac
+│       ├── Cover.jpg
+│       └── Digital Booklet.pdf
+├── The Lovin' Spoonful
+│   ├── Back.jpg
+│   ├── Booklet-2.jpg
+│   ├── Booklet-3.jpg
+│   ├── Booklet-4.jpg
+│   ├── Booklet-5.jpg
+│   ├── Booklet-6.jpg
+│   ├── Booklet.jpg
+│   ├── CD.jpg
+│   ├── Daydream
+│   │   ├── 01 Daydream.flac
+│   │   ├── 02 There She Is.flac
+│   │   ├── 03 It's Not Time Now.flac
+│   │   ├── 04 Warm Baby.flac
+│   │   ├── 05 Day Blues.flac
+│   │   ├── 06 Let The Boy Rock And Roll.flac
+│   │   ├── 07 Jug Band Music.flac
+│   │   ├── 08 Didn't Want To Have To Do It.flac
+│   │   ├── 09 You Didn't Have To Be So Nice.flac
+│   │   ├── 10 Bald Headed Lena.flac
+│   │   ├── 11 Butchie's Tune.flac
+│   │   ├── 12 Big Noise From Speonk.flac
+│   │   ├── 13 Fishin' Blues (Alternative Instrumental Version) (Bonus Track).flac
+│   │   ├── 14 Didn't Want To Have To Do It (Demo Version) (Bonus Track).flac
+│   │   ├── 15 Jug Band Music (Alternative Instrumental Version) (Bonus Track).flac
+│   │   ├── 16 Daydream (Demo Version) (Bonus Track).flac
+│   │   ├── 17 Night Owl Blues (Complete Version) (Bonus Track).flac
+│   │   └── Daydream.cue
+│   ├── Front.jpg
+│   ├── Inlay.jpg
+│   ├── Inside.jpg
+│   └── The Lovin' Spoonful - Daydream.log
+├── The Stan Tracey Quartet
+│   └── Under Milk Wood - Jazz Suite (2018)
+│       ├── 1. Cockle Row.flac
+│       ├── 2. Starless and Bible Black.flac
+│       ├── 3. I Lost My Step in Nantucket.flac
+│       ├── 4. No Good Boyo.flac
+│       ├── 5. Penpals.flac
+│       ├── 6. Llareggub.flac
+│       ├── 7. Under Milk Wood.flac
+│       ├── 8. A.M. Mayhem.flac
+│       └── cover.jpg
+├── Yorushika
+│   ├── 創作
+│   │   ├── 01. 強盗と花束.flac
+│   │   ├── 02. 春泥棒.flac
+│   │   ├── 03. 創作.flac
+│   │   ├── 04. 風を食む.flac
+│   │   └── 05. 嘘月.flac
+│   └── 盗作
+│       ├── 01. 音楽泥棒の自白.flac
+│       ├── 02. 昼鳶.flac
+│       ├── 03. 春ひさぎ.flac
+│       ├── 04. 爆弾魔 (Re-Recording).flac
+│       ├── 05. 青年期、空き巣.flac
+│       ├── 06. レプリカント.flac
+│       ├── 07. 花人局.flac
+│       ├── 08. 朱夏期、音楽泥棒.flac
+│       ├── 09. 盗作.flac
+│       ├── 10. 思想犯.flac
+│       ├── 11. 逃亡.flac
+│       ├── 12. 幼年期、思い出の中.flac
+│       ├── 13. 夜行.flac
+│       └── 14. 花に亡霊.flac
+├── Zedd
+│   └── Telos (2024)
+│       ├── 01.  Out of Time.flac
+│       ├── 01. Out of Time.lrc
+│       ├── 02. Tangerine Rays.flac
+│       ├── 02. Tangerine Rays.lrc
+│       ├── 03.  Shanti.flac
+│       ├── 03. Shanti.lrc
+│       ├── 04.  No Gravity.flac
+│       ├── 04. No Gravity.lrc
+│       ├── 05.  Sona.flac
+│       ├── 06.  Lucky.flac
+│       ├── 06. Lucky.lrc
+│       ├── 07.  Dream Brother.flac
+│       ├── 07. Dream Brother.lrc
+│       ├── 08.  Descensus.flac
+│       ├── 08. Descensus.lrc
+│       ├── 09.  Automatic Yes.flac
+│       ├── 09. Automatic Yes.lrc
+│       ├── 10.  1685.flac
+│       ├── 10. 1685.lrc
+│       ├── album.nfo
+│       └── folder.jpg
+└── 菊谷知樹
+
+83 directories, 840 files
