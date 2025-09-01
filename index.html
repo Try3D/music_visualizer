@@ -42,7 +42,7 @@
       font-weight: 400;
       color: #000;
     }
-    
+
     h4 {
       font-size: 1.1em;
       margin: 25px 0 15px 0;
@@ -135,7 +135,9 @@
   <h2>3D Music Discovery Platform</h2>
 
   <h3>My Solution</h3>
-  <p>I've created an interactive 3D galaxy where your entire music library becomes a navigable cosmos. Each song is positioned based on sonic similarity, creating an intuitive way to discover music relationships that go beyond traditional genre classifications.</p>
+  <p>I've created an interactive 3D galaxy where your entire music library becomes a navigable cosmos. Each song is
+    positioned based on sonic similarity, creating an intuitive way to discover music relationships that go beyond
+    traditional genre classifications.</p>
 
   <h3>Demo Videos</h3>
   <div class="video-grid">
@@ -178,27 +180,37 @@
 
   <h3>Key Features</h3>
   <ul>
-    <li><strong>Multi-Dimensional Audio Analysis:</strong> 56D Sonic DNA extraction with harmonic, rhythmic, timbral, textural, and dynamic genes</li>
-    <li><strong>Emotional Space Mapping:</strong> 4D coordinate system (valence, energy, complexity, tension) for intuitive music understanding</li>
-    <li><strong>Intelligent Playlist Generation:</strong> Interpolated emotional journeys with mathematically optimal transitions</li>
-    <li><strong>Advanced Similarity Detection:</strong> Weighted DNA comparison with musical key detection using Krumhansl–Schmuckler algorithm</li>
-    <li><strong>Interactive 3D Galaxy:</strong> Three.js visualization with bloom effects, raycasting, and real-time connection rendering</li>
-    <li><strong>Automatic Clustering:</strong> K-Means analysis identifying distinct mood groups across the entire library</li>
+    <li><strong>Multi-Dimensional Audio Analysis:</strong> 56D Sonic DNA extraction with harmonic, rhythmic, timbral,
+      textural, and dynamic genes</li>
+    <li><strong>Emotional Space Mapping:</strong> 4D coordinate system (valence, energy, complexity, tension) for
+      intuitive music understanding</li>
+    <li><strong>Intelligent Playlist Generation:</strong> Interpolated emotional journeys with mathematically optimal
+      transitions</li>
+    <li><strong>Advanced Similarity Detection:</strong> Weighted DNA comparison with musical key detection using
+      Krumhansl–Schmuckler algorithm</li>
+    <li><strong>Interactive 3D Galaxy:</strong> Three.js visualization with bloom effects, raycasting, and real-time
+      connection rendering</li>
+    <li><strong>Automatic Clustering:</strong> K-Means analysis identifying distinct mood groups across the entire
+      library</li>
   </ul>
 
   <h3>Technical Implementation</h3>
   <div class="tech-grid">
     <div class="tech-item">
-      <strong>Backend Audio Analysis:</strong> Python + librosa for comprehensive feature extraction, UMAP/t-SNE/PCA for dimensionality reduction
+      <strong>Backend Audio Analysis:</strong> Python + librosa for comprehensive feature extraction, UMAP/t-SNE/PCA for
+      dimensionality reduction
     </div>
     <div class="tech-item">
-      <strong>Frontend Visualization:</strong> Three.js with EffectComposer, UnrealBloomPass, multi-level positioning fallback system
+      <strong>Frontend Visualization:</strong> Three.js with EffectComposer, UnrealBloomPass, multi-level positioning
+      fallback system
     </div>
     <div class="tech-item">
-      <strong>Machine Learning:</strong> Scipy k-NN search, NetworkX pathfinding, K-Means clustering, Euclidean distance metrics
+      <strong>Machine Learning:</strong> Scipy k-NN search, NetworkX pathfinding, K-Means clustering, Euclidean distance
+      metrics
     </div>
     <div class="tech-item">
-      <strong>API Architecture:</strong> RESTful endpoints with concurrent processing, ThreadPoolExecutor, state persistence via LocalStorage
+      <strong>API Architecture:</strong> RESTful endpoints with concurrent processing, ThreadPoolExecutor, state
+      persistence via LocalStorage
     </div>
   </div>
 
@@ -216,7 +228,7 @@
 
   <h3>Analysis & Feature Extraction</h3>
   <p>My analysis pipeline transforms raw audio into a comprehensive feature space through six key stages:</p>
-  
+
   <h4>1. Sonic DNA Extraction (56D Primary Features)</h4>
   <ul>
     <li><strong>Harmonic Genes (12D):</strong> Chroma features from harmonic signal</li>
@@ -225,16 +237,16 @@
     <li><strong>Textural Genes (7D):</strong> Spectral contrast + valley measurements</li>
     <li><strong>Dynamic Genes (16D):</strong> RMS energy + spectral rolloff histograms</li>
   </ul>
-  
+
   <p><strong>Sample Sonic DNA Vector:</strong></p>
   <code>
-  harmonic: [0.82, 0.45, 0.23, 0.67, 0.34, 0.78, 0.12, 0.56, 0.89, 0.33, 0.71, 0.44]<br>
-  rhythmic: [0.12, 0.34, 0.67, 0.23, 0.45, 0.78, 0.56, 0.89]<br>
-  timbral: [-2.1, 1.4, -0.8, 2.3, -1.2, 0.9, -3.1, 1.7, -0.6, 2.8, -1.5, 0.4, -2.7]<br>
-  textural: [0.45, 0.67, 0.23, 0.78, 0.34, 0.56, 0.12]<br>
-  dynamic: [0.23, 0.45, 0.67, 0.34, 0.78, 0.56, 0.89, 0.12, 0.67, 0.34, 0.78, 0.45, 0.23, 0.56, 0.89, 0.12]
+    harmonic: [0.82, 0.45, 0.23, 0.67, 0.34, 0.78, 0.12, 0.56, 0.89, 0.33, 0.71, 0.44]<br>
+    rhythmic: [0.12, 0.34, 0.67, 0.23, 0.45, 0.78, 0.56, 0.89]<br>
+    timbral: [-2.1, 1.4, -0.8, 2.3, -1.2, 0.9, -3.1, 1.7, -0.6, 2.8, -1.5, 0.4, -2.7]<br>
+    textural: [0.45, 0.67, 0.23, 0.78, 0.34, 0.56, 0.12]<br>
+    dynamic: [0.23, 0.45, 0.67, 0.34, 0.78, 0.56, 0.89, 0.12, 0.67, 0.34, 0.78, 0.45, 0.23, 0.56, 0.89, 0.12]
   </code>
-  
+
   <h4>2. Emotional Coordinate Mapping (4D Space)</h4>
   <ul>
     <li><strong>Valence:</strong> Happy ↔ Sad (major/minor + spectral centroid)</li>
@@ -242,305 +254,252 @@
     <li><strong>Complexity:</strong> Complex ↔ Simple (spectral bandwidth + zero-crossing)</li>
     <li><strong>Tension:</strong> Tense ↔ Relaxed (harmonic entropy + energy deviation)</li>
   </ul>
-  
+
   <p><strong>Sample Emotional Coordinates:</strong></p>
   <code>
-  {<br>
-  &nbsp;&nbsp;"valence": 0.73,    // Happy (0.0=sad, 1.0=happy)<br>
-  &nbsp;&nbsp;"energy": 0.82,     // High energy (0.0=calm, 1.0=energetic)<br>
-  &nbsp;&nbsp;"complexity": 0.45, // Moderate complexity (0.0=simple, 1.0=complex)<br>
-  &nbsp;&nbsp;"tension": 0.31     // Relaxed (0.0=relaxed, 1.0=tense)<br>
-  }
+    {<br>
+    &nbsp;&nbsp;"valence": 0.73, // Happy (0.0=sad, 1.0=happy)<br>
+    &nbsp;&nbsp;"energy": 0.82, // High energy (0.0=calm, 1.0=energetic)<br>
+    &nbsp;&nbsp;"complexity": 0.45, // Moderate complexity (0.0=simple, 1.0=complex)<br>
+    &nbsp;&nbsp;"tension": 0.31 // Relaxed (0.0=relaxed, 1.0=tense)<br>
+    }
   </code>
-  
+
   <h4>3. 3D Semantic Positioning</h4>
   <p>Dynamic dimensionality reduction combining 61D features into 3D space using UMAP/t-SNE/PCA.</p>
-  
+
   <p><strong>Sample 3D Coordinates:</strong></p>
   <code>
-  {<br>
-  &nbsp;&nbsp;"x": -12.45,<br>
-  &nbsp;&nbsp;"y": 8.73,<br>
-  &nbsp;&nbsp;"z": -3.21<br>
-  }
+    {<br>
+    &nbsp;&nbsp;"x": -12.45,<br>
+    &nbsp;&nbsp;"y": 8.73,<br>
+    &nbsp;&nbsp;"z": -3.21<br>
+    }
   </code>
-  
+
   <h4>4. Similarity Graph Construction</h4>
   <p>Tracks connected via emotional space proximity (distance < 0.3) with weighted edges.</p>
-  
-  <p><strong>Sample Graph Edges:</strong></p>
-  <code>
-  [<br>
-  &nbsp;&nbsp;{"target": "track_456", "weight": 0.85, "distance": 0.12},<br>
-  &nbsp;&nbsp;{"target": "track_789", "weight": 0.67, "distance": 0.23},<br>
-  &nbsp;&nbsp;{"target": "track_123", "weight": 0.54, "distance": 0.28}<br>
-  ]
-  </code>
-  
-  <h4>5. Color Coding System</h4>
-  <ul>
-    <li><strong>Emotional Colors:</strong> Hue distribution based on valence + energy</li>
-    <li><strong>Sonic Colors:</strong> Harmonic bands mapped to RGB channels</li>
-    <li><strong>Hybrid Mode:</strong> Combined emotional and sonic representations</li>
-  </ul>
-  
-  <p><strong>Sample Color Values:</strong></p>
-  <code>
-  {<br>
-  &nbsp;&nbsp;"emotional_color": "#ff6b4a",  // Orange-red (happy, energetic)<br>
-  &nbsp;&nbsp;"sonic_color": "#4a8fff",      // Blue (dominant high harmonics)<br>
-  &nbsp;&nbsp;"hybrid_color": "#a25fa4"      // Purple (averaged)<br>
-  }
-  </code>
 
-  <h4>6. Interpolated Emotional Journey Engine</h4>
-  <p>Generates playlists that transition smoothly from a start track to an end track by interpolating positions in 4D emotional space.</p>
-  
-  <p><strong>Core Mechanism:</strong></p>
-  <ul>
-    <li><strong>Entry Point:</strong> <code>find_emotional_path(start_track, end_track, max_steps)</code></li>
-    <li><strong>Data Structure:</strong> <code>coordinate_cache: {track_id → EmotionalCoordinate}</code></li>
-    <li><strong>Logic:</strong> Linear interpolation across 4D emotional space with nearest neighbor mapping</li>
-  </ul>
-  
-  <p><strong>Nearest Neighbor Search:</strong></p>
-  <ul>
-    <li><strong>Algorithm:</strong> Brute-force k-NN (k=1) over entire library</li>
-    <li><strong>Distance Metric:</strong> Euclidean (L2 norm via scipy.spatial.distance.euclidean)</li>
-    <li><strong>Guarantee:</strong> Every intermediate song is the mathematically closest emotional match</li>
-  </ul>
-  
-  <p><strong>Sample Generated Journey:</strong></p>
-  <code>
-  [<br>
-  &nbsp;&nbsp;{"track": "Bohemian Rhapsody", "type": "start",<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;"valence": 0.61, "energy": 0.82, "complexity": 0.55, "tension": 0.71},<br>
-  &nbsp;&nbsp;{"track": "Stairway to Heaven", "type": "bridge",<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;"valence": 0.50, "energy": 0.65, "complexity": 0.48, "tension": 0.60},<br>
-  &nbsp;&nbsp;{"track": "The Sound of Silence", "type": "bridge",<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;"valence": 0.32, "energy": 0.42, "complexity": 0.40, "tension": 0.52},<br>
-  &nbsp;&nbsp;{"track": "Mad World", "type": "end",<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;"valence": 0.11, "energy": 0.20, "complexity": 0.38, "tension": 0.47}<br>
-  ]
-  </code>
+      <p><strong>Sample Graph Edges:</strong></p>
+      <code>
+        [<br>
+        &nbsp;&nbsp;{"target": "track_456", "weight": 0.85, "distance": 0.12},<br>
+        &nbsp;&nbsp;{"target": "track_789", "weight": 0.67, "distance": 0.23},<br>
+        &nbsp;&nbsp;{"target": "track_123", "weight": 0.54, "distance": 0.28}<br>
+        ]
+      </code>
 
-  <h4>7. Genetic Similarity & "Find Relatives"</h4>
-  <p>Multi-factor similarity analysis to find musical "relatives" using weighted DNA comparison.</p>
-  
-  <ul>
-    <li><strong>Harmony Weight:</strong> 35% (most important for musical similarity)</li>
-    <li><strong>Rhythm Weight:</strong> 25% (second most important)</li>
-    <li><strong>Timbre Weight:</strong> 20% (voice/instrument character)</li>
-    <li><strong>Texture Weight:</strong> 10% (spectral characteristics)</li>
-    <li><strong>Dynamics Weight:</strong> 10% (energy patterns)</li>
-  </ul>
-  
-  <p><strong>Sample Similarity Results:</strong></p>
-  <code>
-  Query: "Bohemian Rhapsody"<br>
-  Results:<br>
-  &nbsp;&nbsp;🟢 "Don't Stop Me Now" - similarity: 0.89 (same artist, similar energy)<br>
-  &nbsp;&nbsp;🟡 "Piano Man" - similarity: 0.76 (piano-driven, storytelling)<br>
-  &nbsp;&nbsp;🟠 "Hotel California" - similarity: 0.68 (rock ballad structure)<br>
-  &nbsp;&nbsp;🔴 "Imagine" - similarity: 0.45 (different style, lower match)
-  </code>
-  
-  <h4>8. Advanced Musical Key Detection</h4>
-  <p>Robust key-finding using the Krumhansl–Schmuckler algorithm with 24 major/minor templates.</p>
-  
-  <p><strong>Sample Key Detection Results:</strong></p>
-  <code>
-  {<br>
-  &nbsp;&nbsp;"Bohemian Rhapsody": {"key": "Bb major", "confidence": 0.92, "color": "🟢"},<br>
-  &nbsp;&nbsp;"Stairway to Heaven": {"key": "A minor", "confidence": 0.88, "color": "🟢"},<br>
-  &nbsp;&nbsp;"Hotel California": {"key": "B minor", "confidence": 0.85, "color": "🟡"},<br>
-  &nbsp;&nbsp;"Imagine": {"key": "C major", "confidence": 0.91, "color": "🟢"}<br>
-  }
-  </code>
-  
-  <h4>9. Automatic Cluster Analysis</h4>
-  <p>K-Means clustering on 4D emotional coordinates to identify library mood groups.</p>
-  
-  <p><strong>Sample Cluster Results:</strong></p>
-  <code>
-  {<br>
-  &nbsp;&nbsp;"cluster_0": {<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;"label": "🔴 High Energy Rock", "size": 127, "tracks": ["Don't Stop Me Now", "We Will Rock You"],<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;"center": {"valence": 0.8, "energy": 0.9, "complexity": 0.6, "tension": 0.7}<br>
-  &nbsp;&nbsp;},<br>
-  &nbsp;&nbsp;"cluster_1": {<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;"label": "🔵 Melancholic Ballads", "size": 89, "tracks": ["Mad World", "Hurt"],<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;"center": {"valence": 0.2, "energy": 0.3, "complexity": 0.4, "tension": 0.6}<br>
-  &nbsp;&nbsp;},<br>
-  &nbsp;&nbsp;"cluster_2": {<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;"label": "🟢 Upbeat Pop", "size": 156, "tracks": ["Happy", "Can't Stop the Feeling"],<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;"center": {"valence": 0.9, "energy": 0.8, "complexity": 0.3, "tension": 0.2}<br>
-  &nbsp;&nbsp;},<br>
-  &nbsp;&nbsp;"cluster_3": {<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;"label": "🟡 Ambient Chill", "size": 67, "tracks": ["Weightless", "Aqueous Transmission"],<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;"center": {"valence": 0.5, "energy": 0.2, "complexity": 0.7, "tension": 0.1}<br>
-  &nbsp;&nbsp;}<br>
-  }
-  </code>
-  
-  <h4>10. Visual Mapping System</h4>
-  <p><strong>Color Legend for 3D Galaxy:</strong></p>
-  <code>
-  🔴 High Energy + Happy (valence > 0.7, energy > 0.7)<br>
-  🟠 Moderate Energy + Mixed Mood (0.4 < valence < 0.7, 0.4 < energy < 0.7)<br>
-  🟡 Low Energy + Happy (valence > 0.6, energy < 0.4)<br>
-  🟢 High Complexity + Any Mood (complexity > 0.7)<br>
-  🔵 Low Energy + Sad (valence < 0.4, energy < 0.4)<br>
-  🟣 High Tension + Any Energy (tension > 0.7)<br>
-  ⚫ Balanced/Neutral (all dimensions around 0.5)
-  </code>
+      <h4>5. Color Coding System</h4>
+      <ul>
+        <li><strong>Emotional Colors:</strong> Hue distribution based on valence + energy</li>
+        <li><strong>Sonic Colors:</strong> Harmonic bands mapped to RGB channels</li>
+        <li><strong>Hybrid Mode:</strong> Combined emotional and sonic representations</li>
+      </ul>
 
-  <h3>Frontend Technical Specification</h3>
-  
-  <h4>1. 3D Visualization Engine</h4>
-  <p>The frontend's centerpiece is the interactive galaxy visualization, powered by Three.js. Each track renders as a glowing sphere in 3D space.</p>
-  
-  <p><strong>Advanced Sphere Positioning (Multi-level Fallback System):</strong></p>
-  <ul>
-    <li><strong>Backend Coordinates:</strong> Highest priority - exact (x, y, z) from UMAP/t-SNE/PCA</li>
-    <li><strong>4D Emotional Mapping:</strong> Maps (valence, energy, complexity, tension) into 3D space</li>
-    <li><strong>Legacy DNA Fallback:</strong> Uses older "DNA" features if emotional coordinates missing</li>
-    <li><strong>Fibonacci Sphere:</strong> Golden-angle algorithm for even distribution as last resort</li>
-  </ul>
-  
-  <p><strong>Dynamic Visual Effects:</strong></p>
-  <code>
-  // Bloom highlighting system<br>
-  EffectComposer + UnrealBloomPass → addBloomEffect(sphere)<br>
-  THREE.Raycaster → hover/click detection → playback/info/connections<br>
-  addConnectionsForSphere() → on-demand edge rendering for performance
-  </code>
-  
-  <h4>2. Interactive Music Player & Playlist Controls</h4>
-  <p>3D environment coupled with full-featured music player via HTML5 <code>&lt;audio&gt;</code> wrapped in <code>MusicPlayer3D</code> class.</p>
-  
-  <p><strong>Core Playback Features:</strong></p>
-  <ul>
-    <li><strong>Play/Pause:</strong> <code>audio.play()</code> and <code>audio.pause()</code> with synced UI state</li>
-    <li><strong>Seeking:</strong> Progress bar tied to <code>input</code> event updates <code>audio.currentTime</code></li>
-    <li><strong>Track Navigation:</strong> <code>playNext()</code> and <code>playPrevious()</code> traverse <code>selectedTracks</code></li>
-    <li><strong>Looping:</strong> <code>audio.ended</code> triggers <code>playNext()</code> with playlist wraparound</li>
-  </ul>
-  
-  <p><strong>3D Integration Sample:</strong></p>
-  <code>
-  // Sphere selection updates player<br>
-  sphere.onClick = () => {<br>
-  &nbsp;&nbsp;musicPlayer.loadTrack(sphere.trackData);<br>
-  &nbsp;&nbsp;addBloomEffect(sphere);<br>
-  &nbsp;&nbsp;addConnectionsForSphere(sphere);<br>
-  };
-  </code>
-  
-  <h4>3. State Persistence with LocalStorage</h4>
-  <p>Ensures playlist continuity across sessions using browser LocalStorage.</p>
-  
-  <p><strong>Persistence Flow:</strong></p>
-  <ul>
-    <li><strong>Adding Tracks:</strong> Sphere clicks push track into <code>selectedTracks</code></li>
-    <li><strong>Saving:</strong> <code>saveSelectedTracks()</code> serializes to JSON under <code>musicPlayer_selectedTracks</code></li>
-    <li><strong>Restoring:</strong> <code>loadSelectedTracks()</code> + <code>restoreVisualSelections()</code> on startup</li>
-  </ul>
-  
-  <p><strong>Sample Persistence Code:</strong></p>
-  <code>
-  // Save playlist state<br>
-  localStorage.setItem('musicPlayer_selectedTracks', JSON.stringify(selectedTracks));<br>
-  <br>
-  // Restore on load<br>
-  const saved = JSON.parse(localStorage.getItem('musicPlayer_selectedTracks') || '[]');<br>
-  selectedTracks = saved;<br>
-  restoreVisualSelections();
-  </code>
+      <p><strong>Sample Color Values:</strong></p>
+      <code>
+        {<br>
+        &nbsp;&nbsp;"emotional_color": "#ff6b4a", // Orange-red (happy, energetic)<br>
+        &nbsp;&nbsp;"sonic_color": "#4a8fff", // Blue (dominant high harmonics)<br>
+        &nbsp;&nbsp;"hybrid_color": "#a25fa4" // Purple (averaged)<br>
+        }
+      </code>
 
-  <h3>My Solution</h3>
-  <p>I've created an interactive 3D galaxy where your entire music library becomes a navigable cosmos. Each song is
-    positioned based on sonic similarity, creating an intuitive way to discover music relationships that go beyond
-    traditional genre classifications.</p>
+      <h4>6. Interpolated Emotional Journey Engine</h4>
+      <p>Generates playlists that transition smoothly from a start track to an end track by interpolating positions in
+        4D emotional space.</p>
 
-  <h3>Key Features</h3>
-  <ul>
-    <li><strong>Sonic DNA Extraction:</strong> Multi-dimensional audio fingerprints using librosa analysis</li>
-    <li><strong>3D Spatial Mapping:</strong> UMAP dimensionality reduction for intuitive positioning</li>
-    <li><strong>Visual Playlist Creation:</strong> Draw paths through the galaxy to create flowing playlists</li>
-    <li><strong>Interactive Discovery:</strong> Click tracks to reveal acoustically similar neighbors</li>
-    <li><strong>Mood Trajectory Visualization:</strong> See emotional journeys as paths through space</li>
-  </ul>
+      <p><strong>Core Mechanism:</strong></p>
+      <ul>
+        <li><strong>Entry Point:</strong> <code>find_emotional_path(start_track, end_track, max_steps)</code></li>
+        <li><strong>Data Structure:</strong> <code>coordinate_cache: {track_id → EmotionalCoordinate}</code></li>
+        <li><strong>Logic:</strong> Linear interpolation across 4D emotional space with nearest neighbor mapping</li>
+      </ul>
 
-  <h3>Technical Implementation</h3>
-  <div class="tech-grid">
-    <div class="tech-item">
-      <strong>Backend:</strong> Python + librosa for audio feature extraction
-    </div>
-    <div class="tech-item">
-      <strong>Frontend:</strong> Three.js for 3D visualization
-    </div>
-    <div class="tech-item">
-      <strong>API:</strong> RESTful endpoints for library scanning
-    </div>
-    <div class="tech-item">
-      <strong>ML:</strong> UMAP for spatial coordinate mapping
-    </div>
-  </div>
+      <p><strong>Nearest Neighbor Search:</strong></p>
+      <ul>
+        <li><strong>Algorithm:</strong> Brute-force k-NN (k=1) over entire library</li>
+        <li><strong>Distance Metric:</strong> Euclidean (L2 norm via scipy.spatial.distance.euclidean)</li>
+        <li><strong>Guarantee:</strong> Every intermediate song is the mathematically closest emotional match</li>
+      </ul>
 
-  <h3>Demo Videos</h3>
-  <div class="video-grid">
-    <div class="video-item">
-      <h4>Galaxy Navigation</h4>
-      <video controls preload="metadata">
-        <source src="docs/navigation.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-      <p>Pan, zoom, and rotate through the 3D galaxy</p>
-    </div>
+      <p><strong>Sample Generated Journey:</strong></p>
+      <code>
+        [<br>
+        &nbsp;&nbsp;{"track": "Bohemian Rhapsody", "type": "start",<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"valence": 0.61, "energy": 0.82, "complexity": 0.55, "tension": 0.71},<br>
+        &nbsp;&nbsp;{"track": "Stairway to Heaven", "type": "bridge",<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"valence": 0.50, "energy": 0.65, "complexity": 0.48, "tension": 0.60},<br>
+        &nbsp;&nbsp;{"track": "The Sound of Silence", "type": "bridge",<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"valence": 0.32, "energy": 0.42, "complexity": 0.40, "tension": 0.52},<br>
+        &nbsp;&nbsp;{"track": "Mad World", "type": "end",<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"valence": 0.11, "energy": 0.20, "complexity": 0.38, "tension": 0.47}<br>
+        ]
+      </code>
 
-    <div class="video-item">
-      <h4>Similar Song Discovery</h4>
-      <video controls preload="metadata">
-        <source src="docs/similar-songs.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-      <p>Click tracks to reveal similar neighbors</p>
-    </div>
+      <h4>7. Genetic Similarity & "Find Relatives"</h4>
+      <p>Multi-factor similarity analysis to find musical "relatives" using weighted DNA comparison.</p>
 
-    <div class="video-item">
-      <h4>Visual Playlist Creation</h4>
-      <video controls preload="metadata">
-        <source src="docs/playlist-generation.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-      <p>Draw paths to create flowing playlists</p>
-    </div>
+      <ul>
+        <li><strong>Harmony Weight:</strong> 35% (most important for musical similarity)</li>
+        <li><strong>Rhythm Weight:</strong> 25% (second most important)</li>
+        <li><strong>Timbre Weight:</strong> 20% (voice/instrument character)</li>
+        <li><strong>Texture Weight:</strong> 10% (spectral characteristics)</li>
+        <li><strong>Dynamics Weight:</strong> 10% (energy patterns)</li>
+      </ul>
 
-    <div class="video-item">
-      <h4>Interactive Playback</h4>
-      <video controls preload="metadata">
-        <source src="docs/start-end-track.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-      <p>Control playback from the 3D scene</p>
-    </div>
-  </div>
+      <p><strong>Sample Similarity Results:</strong></p>
+      <code>
+        Query: "Bohemian Rhapsody"<br>
+        Results:<br>
+        &nbsp;&nbsp;🟢 "Don't Stop Me Now" - similarity: 0.89 (same artist, similar energy)<br>
+        &nbsp;&nbsp;🟡 "Piano Man" - similarity: 0.76 (piano-driven, storytelling)<br>
+        &nbsp;&nbsp;🟠 "Hotel California" - similarity: 0.68 (rock ballad structure)<br>
+        &nbsp;&nbsp;🔴 "Imagine" - similarity: 0.45 (different style, lower match)
+      </code>
 
-  <h3>Quick Start</h3>
-  <ol>
-    <li>Install dependencies: <code>pip install -r requirements.txt</code></li>
-    <li>Start backend: <code>python backend/api/api_server.py</code></li>
-    <li>Open <code>frontend/index.html</code> in browser</li>
-    <li>Point to your music library and explore</li>
-  </ol>
+      <h4>8. Advanced Musical Key Detection</h4>
+      <p>Robust key-finding using the Krumhansl–Schmuckler algorithm with 24 major/minor templates.</p>
 
-  <h3>Test Music Library</h3>
-  <p>Curated collection available at: <a href="https://vader.tail96aa.ts.net/">https://vader.tail96aa.ts.net/</a></p>
+      <p><strong>Sample Key Detection Results:</strong></p>
+      <code>
+        {<br>
+        &nbsp;&nbsp;"Bohemian Rhapsody": {"key": "Bb major", "confidence": 0.92, "color": "🟢"},<br>
+        &nbsp;&nbsp;"Stairway to Heaven": {"key": "A minor", "confidence": 0.88, "color": "🟢"},<br>
+        &nbsp;&nbsp;"Hotel California": {"key": "B minor", "confidence": 0.85, "color": "🟡"},<br>
+        &nbsp;&nbsp;"Imagine": {"key": "C major", "confidence": 0.91, "color": "🟢"}<br>
+        }
+      </code>
 
-  <footer>
-    <p>Hackathon Submission - Innovative Music Discovery Platform</p>
-  </footer>
+      <h4>9. Automatic Cluster Analysis</h4>
+      <p>K-Means clustering on 4D emotional coordinates to identify library mood groups.</p>
+
+      <p><strong>Sample Cluster Results:</strong></p>
+      <code>
+        {<br>
+        &nbsp;&nbsp;"cluster_0": {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"label": "🔴 High Energy Rock", "size": 127, "tracks": ["Don't Stop Me Now", "We Will
+        Rock You"],<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"center": {"valence": 0.8, "energy": 0.9, "complexity": 0.6, "tension": 0.7}<br>
+        &nbsp;&nbsp;},<br>
+        &nbsp;&nbsp;"cluster_1": {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"label": "🔵 Melancholic Ballads", "size": 89, "tracks": ["Mad World", "Hurt"],<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"center": {"valence": 0.2, "energy": 0.3, "complexity": 0.4, "tension": 0.6}<br>
+        &nbsp;&nbsp;},<br>
+        &nbsp;&nbsp;"cluster_2": {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"label": "🟢 Upbeat Pop", "size": 156, "tracks": ["Happy", "Can't Stop the
+        Feeling"],<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"center": {"valence": 0.9, "energy": 0.8, "complexity": 0.3, "tension": 0.2}<br>
+        &nbsp;&nbsp;},<br>
+        &nbsp;&nbsp;"cluster_3": {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"label": "🟡 Ambient Chill", "size": 67, "tracks": ["Weightless", "Aqueous
+        Transmission"],<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"center": {"valence": 0.5, "energy": 0.2, "complexity": 0.7, "tension": 0.1}<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </code>
+
+      <h4>10. Visual Mapping System</h4>
+      <p><strong>Color Legend for 3D Galaxy:</strong></p>
+      <code>
+        🔴 High Energy + Happy (valence > 0.7, energy > 0.7)<br>
+        🟠 Moderate Energy + Mixed Mood (0.4 < valence < 0.7, 0.4 < energy < 0.7)<br>
+          🟡 Low Energy + Happy (valence > 0.6, energy < 0.4)<br>
+            🟢 High Complexity + Any Mood (complexity > 0.7)<br>
+            🔵 Low Energy + Sad (valence < 0.4, energy < 0.4)<br>
+              🟣 High Tension + Any Energy (tension > 0.7)<br>
+              ⚫ Balanced/Neutral (all dimensions around 0.5)
+      </code>
+
+      <h3>Frontend Technical Specification</h3>
+
+      <h4>1. 3D Visualization Engine</h4>
+      <p>The frontend's centerpiece is the interactive galaxy visualization, powered by Three.js. Each track renders as
+        a glowing sphere in 3D space.</p>
+
+      <p><strong>Advanced Sphere Positioning (Multi-level Fallback System):</strong></p>
+      <ul>
+        <li><strong>Backend Coordinates:</strong> Highest priority - exact (x, y, z) from UMAP/t-SNE/PCA</li>
+        <li><strong>4D Emotional Mapping:</strong> Maps (valence, energy, complexity, tension) into 3D space</li>
+        <li><strong>Legacy DNA Fallback:</strong> Uses older "DNA" features if emotional coordinates missing</li>
+        <li><strong>Fibonacci Sphere:</strong> Golden-angle algorithm for even distribution as last resort</li>
+      </ul>
+
+      <p><strong>Dynamic Visual Effects:</strong></p>
+      <code>
+        // Bloom highlighting system<br>
+        EffectComposer + UnrealBloomPass → addBloomEffect(sphere)<br>
+        THREE.Raycaster → hover/click detection → playback/info/connections<br>
+        addConnectionsForSphere() → on-demand edge rendering for performance
+      </code>
+
+      <h4>2. Interactive Music Player & Playlist Controls</h4>
+      <p>3D environment coupled with full-featured music player via HTML5 <code>&lt;audio&gt;</code> wrapped in
+        <code>MusicPlayer3D</code> class.
+      </p>
+
+      <p><strong>Core Playback Features:</strong></p>
+      <ul>
+        <li><strong>Play/Pause:</strong> <code>audio.play()</code> and <code>audio.pause()</code> with synced UI state
+        </li>
+        <li><strong>Seeking:</strong> Progress bar tied to <code>input</code> event updates
+          <code>audio.currentTime</code>
+        </li>
+        <li><strong>Track Navigation:</strong> <code>playNext()</code> and <code>playPrevious()</code> traverse
+          <code>selectedTracks</code>
+        </li>
+        <li><strong>Looping:</strong> <code>audio.ended</code> triggers <code>playNext()</code> with playlist wraparound
+        </li>
+      </ul>
+
+      <p><strong>3D Integration Sample:</strong></p>
+      <code>
+        // Sphere selection updates player<br>
+        sphere.onClick = () => {<br>
+        &nbsp;&nbsp;musicPlayer.loadTrack(sphere.trackData);<br>
+        &nbsp;&nbsp;addBloomEffect(sphere);<br>
+        &nbsp;&nbsp;addConnectionsForSphere(sphere);<br>
+        };
+      </code>
+
+      <h4>3. State Persistence with LocalStorage</h4>
+      <p>Ensures playlist continuity across sessions using browser LocalStorage.</p>
+
+      <p><strong>Persistence Flow:</strong></p>
+      <ul>
+        <li><strong>Adding Tracks:</strong> Sphere clicks push track into <code>selectedTracks</code></li>
+        <li><strong>Saving:</strong> <code>saveSelectedTracks()</code> serializes to JSON under
+          <code>musicPlayer_selectedTracks</code>
+        </li>
+        <li><strong>Restoring:</strong> <code>loadSelectedTracks()</code> + <code>restoreVisualSelections()</code> on
+          startup</li>
+      </ul>
+
+      <p><strong>Sample Persistence Code:</strong></p>
+      <code>
+        // Save playlist state<br>
+        localStorage.setItem('musicPlayer_selectedTracks', JSON.stringify(selectedTracks));<br>
+        <br>
+        // Restore on load<br>
+        const saved = JSON.parse(localStorage.getItem('musicPlayer_selectedTracks') || '[]');<br>
+        selectedTracks = saved;<br>
+        restoreVisualSelections();
+      </code>
+      <h3>Quick Start</h3>
+      <ol>
+        <li>Install dependencies: <code>pip install -r requirements.txt</code></li>
+        <li>Start backend: <code>python backend/api/api_server.py</code></li>
+        <li>Open <code>frontend/index.html</code> in browser</li>
+        <li>Point to your music library and explore</li>
+      </ol>
+
+      <h3>Test Music Library</h3>
+      <p>Curated collection available at: <a href="https://vader.tail96aa.ts.net/">https://vader.tail96aa.ts.net/</a>
+      </p>
+
+      <footer>
+        <p>Hackathon Submission - Innovative Music Discovery Platform</p>
+      </footer>
 </body>
 
 </html>
