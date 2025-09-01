@@ -710,6 +710,10 @@ export class MusicPlayer3D {
         const trackId = sphere.userData.track.track_id || sphere.userData.track.uuid || sphere.userData.track.id
         const isNowSelected = this.clickedSpheres.has(trackId)
         
+        // Store the original emissive state to restore it after animation
+        const originalEmissive = sphere.material.emissive.getHex()
+        const originalEmissiveIntensity = sphere.material.emissiveIntensity
+        
         // Create immediate bright flash
         sphere.material.emissive.setHex(0x00FFFF) // Bright cyan
         sphere.material.emissiveIntensity = 1.0
@@ -734,8 +738,8 @@ export class MusicPlayer3D {
                     sphere.material.emissive.setHex(0x1DB954) // Green for selected
                     sphere.material.emissiveIntensity = 0.3
                 } else {
-                    sphere.material.emissive.setHex(0x000000) // No glow for unselected
-                    sphere.material.emissiveIntensity = 0
+                    sphere.material.emissive.setHex(originalEmissive) // Restore original emissive
+                    sphere.material.emissiveIntensity = originalEmissiveIntensity
                 }
             }
         }

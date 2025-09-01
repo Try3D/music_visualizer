@@ -7,7 +7,8 @@ Serves visualization data and provides analysis endpoints
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, FileResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, FileResponse, StreamingResponse, Response
+import httpx
 import uvicorn
 import json
 from pathlib import Path
@@ -56,7 +57,7 @@ def load_uuid_file_mapping():
     global uuid_file_mapping
     # Use absolute path relative to the project root
     project_root = Path(__file__).parent.parent.parent
-    mapping_path = project_root / "data/uuid_file_mapping.json"
+    mapping_path = project_root / "data/local_uuid_file_mappings.json"
     if mapping_path.exists():
         with open(mapping_path, "r") as f:
             uuid_file_mapping = json.load(f)
@@ -542,24 +543,52 @@ async def get_track_audio_by_uuid(track_uuid: str):
     # Use direct UUID to file mapping first
     audio_file_path = uuid_file_mapping.get(track_uuid)
 
-    if audio_file_path and Path(audio_file_path).exists():
-        print(f"✅ Found audio file via direct mapping: {audio_file_path}")
-        audio_file = Path(audio_file_path)
+    # Check if it's a URL (new format) or local file path (old format)
+    if audio_file_path:
+        # If it's a URL, proxy the request
+        if audio_file_path.startswith("http"):
+            print(f"✅ Found audio URL via direct mapping: {audio_file_path}")
+            # Proxy the content from the remote URL
+            try:
+                async with httpx.AsyncClient() as client:
+                    response = await client.get(audio_file_path)
+                    if response.status_code == 200:
+                        # Return the content with appropriate headers
+                        return Response(
+                            content=response.content,
+                            media_type="audio/flac" if audio_file_path.endswith(".flac") else "audio/mpeg",
+                            headers={
+                                "Accept-Ranges": "bytes",
+                                "Cache-Control": "public, max-age=3600",
+                                "X-Track-UUID": track_uuid,
+                                "Access-Control-Allow-Origin": "*",
+                                "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+                                "Access-Control-Allow-Headers": "*",
+                            },
+                        )
+                    else:
+                        print(f"❌ Failed to fetch audio from URL: {response.status_code}")
+            except Exception as e:
+                print(f"❌ Error fetching audio from URL: {str(e)}")
+        # If it's a local file path, check if it exists
+        elif Path(audio_file_path).exists():
+            print(f"✅ Found audio file via direct mapping: {audio_file_path}")
+            audio_file = Path(audio_file_path)
 
-        # Return file response with appropriate headers
-        return FileResponse(
-            path=str(audio_file),
-            media_type="audio/flac" if audio_file.suffix == ".flac" else "audio/mpeg",
-            filename=audio_file.name,
-            headers={
-                "Accept-Ranges": "bytes",
-                "Cache-Control": "public, max-age=3600",
-                "X-Track-UUID": track_uuid,
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-                "Access-Control-Allow-Headers": "*",
-            },
-        )
+            # Return file response with appropriate headers
+            return FileResponse(
+                path=str(audio_file),
+                media_type="audio/flac" if audio_file.suffix == ".flac" else "audio/mpeg",
+                filename=audio_file.name,
+                headers={
+                    "Accept-Ranges": "bytes",
+                    "Cache-Control": "public, max-age=3600",
+                    "X-Track-UUID": track_uuid,
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+                    "Access-Control-Allow-Headers": "*",
+                },
+            )
 
     # Fallback to original method if not in direct mapping
     print(f"⚠️  UUID {track_uuid} not found in direct mapping, trying fallback...")
@@ -627,24 +656,52 @@ async def get_track_audio_by_uuid_post(request_data: dict):
     # Use direct UUID to file mapping first
     audio_file_path = uuid_file_mapping.get(track_uuid)
 
-    if audio_file_path and Path(audio_file_path).exists():
-        print(f"✅ Found audio file via direct mapping: {audio_file_path}")
-        audio_file = Path(audio_file_path)
+    # Check if it's a URL (new format) or local file path (old format)
+    if audio_file_path:
+        # If it's a URL, proxy the request
+        if audio_file_path.startswith("http"):
+            print(f"✅ Found audio URL via direct mapping: {audio_file_path}")
+            # Proxy the content from the remote URL
+            try:
+                async with httpx.AsyncClient() as client:
+                    response = await client.get(audio_file_path)
+                    if response.status_code == 200:
+                        # Return the content with appropriate headers
+                        return Response(
+                            content=response.content,
+                            media_type="audio/flac" if audio_file_path.endswith(".flac") else "audio/mpeg",
+                            headers={
+                                "Accept-Ranges": "bytes",
+                                "Cache-Control": "public, max-age=3600",
+                                "X-Track-UUID": track_uuid,
+                                "Access-Control-Allow-Origin": "*",
+                                "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+                                "Access-Control-Allow-Headers": "*",
+                            },
+                        )
+                    else:
+                        print(f"❌ Failed to fetch audio from URL: {response.status_code}")
+            except Exception as e:
+                print(f"❌ Error fetching audio from URL: {str(e)}")
+        # If it's a local file path, check if it exists
+        elif Path(audio_file_path).exists():
+            print(f"✅ Found audio file via direct mapping: {audio_file_path}")
+            audio_file = Path(audio_file_path)
 
-        # Return file response with CORS headers
-        return FileResponse(
-            path=str(audio_file),
-            media_type="audio/flac" if audio_file.suffix == ".flac" else "audio/mpeg",
-            filename=audio_file.name,
-            headers={
-                "Accept-Ranges": "bytes",
-                "Cache-Control": "public, max-age=3600",
-                "X-Track-UUID": track_uuid,
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-                "Access-Control-Allow-Headers": "*",
-            },
-        )
+            # Return file response with CORS headers
+            return FileResponse(
+                path=str(audio_file),
+                media_type="audio/flac" if audio_file.suffix == ".flac" else "audio/mpeg",
+                filename=audio_file.name,
+                headers={
+                    "Accept-Ranges": "bytes",
+                    "Cache-Control": "public, max-age=3600",
+                    "X-Track-UUID": track_uuid,
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+                    "Access-Control-Allow-Headers": "*",
+                },
+            )
 
     # Fallback to original method if not in direct mapping
     print(f"⚠️  UUID {track_uuid} not found in direct mapping, trying fallback...")
