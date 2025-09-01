@@ -171,12 +171,20 @@ export class MusicPlayer3D {
     async loadTracks() {
         try {
             this.vlog('[TRACKS] Loading positioned tracks from API...')
-            const response = await fetch(`${this.apiBase}/tracks/positioned`)
+            const response = await fetch(`${this.apiBase}/tracks/positioned`, {
+                method: 'GET',
+                mode: 'cors',
+                credentials: 'omit'
+            })
             if (!response.ok) {
-                this.vlog('[WARN] Positioned tracks not available, falling back to regular tracks', 'warning')
-                const fallbackResponse = await fetch(`${this.apiBase}/tracks`)
+                this.vlog(`[WARN] Positioned tracks not available (${response.status}), falling back to regular tracks`, 'warning')
+                const fallbackResponse = await fetch(`${this.apiBase}/tracks`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'omit'
+                })
                 if (!fallbackResponse.ok) {
-                    throw new Error(`Failed to load tracks: ${fallbackResponse.status}`)
+                    throw new Error(`Failed to load tracks: ${fallbackResponse.status} ${fallbackResponse.statusText}`)
                 }
                 const fallbackData = await fallbackResponse.json()
                 // Handle both array format and object format from API
@@ -206,7 +214,14 @@ export class MusicPlayer3D {
             
         } catch (error) {
             console.error('[ERROR] Error loading tracks:', error)
-            throw new Error('Failed to connect to music API. Please ensure the server is running on localhost:8000')
+            // More detailed error logging
+            if (error instanceof TypeError && error.message === 'Failed to fetch') {
+                this.vlog('[ERROR] Network error - Failed to connect to API. Please check:', 'error')
+                this.vlog('[ERROR] 1. Is the backend server running on localhost:8000?', 'error')
+                this.vlog('[ERROR] 2. Is CORS properly configured?', 'error')
+                this.vlog('[ERROR] 3. Are there any network/firewall issues?', 'error')
+            }
+            throw new Error(`Failed to connect to music API. Please ensure the server is running on localhost:8000. Details: ${error.message}`)
         }
     }
 
@@ -300,6 +315,19 @@ export class MusicPlayer3D {
         
         // Update navigation button states
         this.updateNavigationButtons()
+        
+        // Ensure bloom effects are applied to all selected tracks
+        this.selectedTracks.forEach((track, index) => {
+            const trackId = track.track_id || track.uuid || track.id
+            const sphere = this.trackMap?.get(trackId)
+            if (sphere && !sphere.material.userData.isSelected) {
+                this.addBloomEffect(sphere)
+                sphere.scale.set(1.3, 1.3, 1.3)
+            }
+        })
+        
+        // Show connections for all tracks in the playlist
+        this.showPlaylistConnections()
     }
 
     setupScene() {
@@ -637,6 +665,10 @@ export class MusicPlayer3D {
             this.removeBloomEffect(sphere)
             sphere.scale.set(1, 1, 1)
             
+            // Remove visual glow effect
+            sphere.material.emissive.setHex(0x000000) // Remove glow
+            sphere.material.emissiveIntensity = 0
+            
             // Remove from selected tracks
             this.removeFromSelectedTracks(trackId)
             
@@ -650,6 +682,10 @@ export class MusicPlayer3D {
             this.addBloomEffect(sphere)
             sphere.scale.set(1.3, 1.3, 1.3)
             
+            // Add visual glow effect immediately on click
+            sphere.material.emissive.setHex(0x1DB954) // Green glow
+            sphere.material.emissiveIntensity = 0.3
+            
             // Add to selected tracks 
             this.addToSelectedTracks(sphere.userData.track, trackId)
             
@@ -661,6 +697,50 @@ export class MusicPlayer3D {
         
         // Update count display
         this.updateTrackCountDisplay()
+        
+        // Add wave effect AFTER all toggle logic is complete
+        this.createClickWaveEffect(sphere)
+    }
+
+    createClickWaveEffect(sphere) {
+        // Simple immediate wave effect - just flash bright and fade
+        console.log('[WAVE] Creating click wave effect')
+        
+        // Check current selection state AFTER toggle
+        const trackId = sphere.userData.track.track_id || sphere.userData.track.uuid || sphere.userData.track.id
+        const isNowSelected = this.clickedSpheres.has(trackId)
+        
+        // Create immediate bright flash
+        sphere.material.emissive.setHex(0x00FFFF) // Bright cyan
+        sphere.material.emissiveIntensity = 1.0
+        
+        // Animate back over 400ms
+        let startTime = null
+        const duration = 400
+        
+        const animate = (timestamp) => {
+            if (!startTime) startTime = timestamp
+            const elapsed = timestamp - startTime
+            const progress = Math.min(elapsed / duration, 1)
+            
+            // Fade out the cyan glow
+            sphere.material.emissiveIntensity = 1.0 * (1 - progress)
+            
+            if (progress < 1) {
+                requestAnimationFrame(animate)
+            } else {
+                // Reset to appropriate final state based on selection
+                if (isNowSelected) {
+                    sphere.material.emissive.setHex(0x1DB954) // Green for selected
+                    sphere.material.emissiveIntensity = 0.3
+                } else {
+                    sphere.material.emissive.setHex(0x000000) // No glow for unselected
+                    sphere.material.emissiveIntensity = 0
+                }
+            }
+        }
+        
+        requestAnimationFrame(animate)
     }
 
     addBloomEffect(sphere) {
@@ -819,6 +899,86 @@ export class MusicPlayer3D {
         console.log(`[SIMILAR] Found ${this.similarityContext.size} tracks in similarity context`)
     }
 
+    showPlaylistConnections() {
+        // Don't show playlist connections in discovery modes as they might conflict
+        if (this.discoveryMode !== 'none') return
+        
+        // Clear any existing playlist connections
+        const existingPlaylistLines = this.activeConnections.get('playlist')
+        if (existingPlaylistLines) {
+            existingPlaylistLines.forEach(line => {
+                this.scene.remove(line)
+                line.geometry.dispose()
+                line.material.dispose()
+            })
+        }
+        
+        // If we have less than 2 tracks, no need for connections
+        if (this.selectedTracks.length < 2) {
+            this.activeConnections.delete('playlist')
+            return
+        }
+        
+        // If trackMap is not initialized yet, skip showing connections
+        if (!this.trackMap) {
+            return
+        }
+        
+        const connectionLines = []
+        
+        // Create connections between consecutive tracks in the playlist
+        for (let i = 0; i < this.selectedTracks.length - 1; i++) {
+            const sourceTrack = this.selectedTracks[i]
+            const targetTrack = this.selectedTracks[i + 1]
+            
+            const sourceTrackId = sourceTrack.track_id || sourceTrack.uuid || sourceTrack.id
+            const targetTrackId = targetTrack.track_id || targetTrack.uuid || targetTrack.id
+            
+            const sourceSphere = this.trackMap.get(sourceTrackId)
+            const targetSphere = this.trackMap.get(targetTrackId)
+            
+            if (sourceSphere && targetSphere) {
+                // Create curved line geometry for a more interesting visual
+                const startPoint = sourceSphere.position.clone()
+                const endPoint = targetSphere.position.clone()
+                
+                // Calculate a midpoint with an offset for the curve
+                const midPoint = new THREE.Vector3().lerpVectors(startPoint, endPoint, 0.5)
+                // Add some height to create a curve
+                midPoint.y += 1.0
+                
+                // Create a quadratic bezier curve
+                const curve = new THREE.QuadraticBezierCurve3(startPoint, midPoint, endPoint)
+                const points = curve.getPoints(20) // Get 20 points along the curve
+                const geometry = new THREE.BufferGeometry().setFromPoints(points)
+                
+                // Line material with a subtle color
+                const material = new THREE.LineBasicMaterial({
+                    color: new THREE.Color(0x1DB954), // Spotify green
+                    transparent: true,
+                    opacity: 0.7,
+                    linewidth: 1.5
+                })
+                
+                const line = new THREE.Line(geometry, material)
+                line.userData = {
+                    type: 'playlistConnection',
+                    sourceTrack: sourceTrackId,
+                    targetTrack: targetTrackId,
+                    isStatic: true
+                }
+                
+                this.scene.add(line)
+                connectionLines.push(line)
+            }
+        }
+        
+        // Store the connection lines for the playlist
+        this.activeConnections.set('playlist', connectionLines)
+        
+        console.log(`[PLAYLIST] Created ${connectionLines.length} playlist connections`)
+    }
+
     calculateVectorSimilarity(vec1, vec2) {
         if (!vec1 || !vec2 || vec1.length !== vec2.length) return 0
         
@@ -880,6 +1040,9 @@ export class MusicPlayer3D {
         this.musicSpheres.forEach(sphere => {
             this.removeBloomEffect(sphere)
             sphere.scale.set(1, 1, 1)
+            // Remove all emissive effects (the "waves/glow")
+            sphere.material.emissive.setHex(0x000000)
+            sphere.material.emissiveIntensity = 0
         })
         
         // Clear selected tracks
@@ -888,7 +1051,65 @@ export class MusicPlayer3D {
         this.saveSelectedTracks()
         
         this.updateTrackCountDisplay()
+        this.updateSelectedTracksList()
         console.log('[CONNECTION] Cleared all connections')
+    }
+
+    clearConnectionsOnly() {
+        // Remove all active connections but preserve selected tracks and playlist connections
+        const playlistConnections = this.activeConnections.get('playlist')
+        
+        this.activeConnections.forEach((connectionLines, key) => {
+            // Preserve playlist connections
+            if (key === 'playlist') return
+            
+            connectionLines.forEach(line => {
+                this.scene.remove(line)
+                line.geometry.dispose()
+                line.material.dispose()
+            })
+        })
+        
+        // Clear all connections except playlist
+        this.activeConnections.forEach((connectionLines, key) => {
+            if (key !== 'playlist') {
+                this.activeConnections.delete(key)
+            }
+        })
+        
+        this.clickedSpheres.clear()
+        
+        // Reset all sphere appearances and remove bloom (except for selected tracks)
+        this.musicSpheres.forEach(sphere => {
+            const trackId = sphere.userData.track.track_id || sphere.userData.track.uuid || sphere.userData.track.id
+            // Only remove bloom if this sphere is not part of the selected tracks
+            const isSelectedTrack = this.selectedTracks.some(track => 
+                (track.track_id || track.uuid || track.id) === trackId)
+            
+            if (!isSelectedTrack) {
+                this.removeBloomEffect(sphere)
+                sphere.scale.set(1, 1, 1)
+            }
+        })
+        
+        // Preserve selected tracks and reapply their visual state
+        this.selectedTracks.forEach(track => {
+            const trackId = track.track_id || track.uuid || track.id
+            this.clickedSpheres.add(trackId)
+            const sphere = this.trackMap?.get(trackId)
+            if (sphere) {
+                this.addBloomEffect(sphere)
+                sphere.scale.set(1.3, 1.3, 1.3)
+            }
+        })
+        
+        // Restore playlist connections if they existed
+        if (playlistConnections) {
+            this.activeConnections.set('playlist', playlistConnections)
+        }
+        
+        this.updateTrackCountDisplay()
+        console.log('[CONNECTION] Cleared connections only, preserved selected tracks and playlist connections')
     }
 
     // localStorage management for selected tracks
@@ -946,10 +1167,18 @@ export class MusicPlayer3D {
                 this.clickedSpheres.add(trackId)
                 this.addBloomEffect(sphere)
                 sphere.scale.set(1.3, 1.3, 1.3)
-                this.addConnectionsForSphere(trackId)
+                // Add connections only in discovery modes
+                if (this.discoveryMode !== 'none') {
+                    this.addConnectionsForSphere(trackId)
+                }
                 console.log(`[VISUAL] Restored visual selection for: ${trackId}`)
             }
         })
+        
+        // Show playlist connections
+        if (this.discoveryMode === 'none') {
+            this.showPlaylistConnections()
+        }
         
         console.log(`[SUCCESS] Restored ${this.clickedSpheres.size} visual selections`)
         this.updateTrackCountDisplay()
@@ -997,6 +1226,11 @@ export class MusicPlayer3D {
             
             // Update playlist flow visualization
             this.createPlaylistFlow()
+            
+            // Update playlist connections
+            if (this.discoveryMode === 'none') {
+                this.showPlaylistConnections()
+            }
         }
     }
 
@@ -1334,6 +1568,26 @@ export class MusicPlayer3D {
         // Press 'Escape' to clear all connections
         if (event.key === 'Escape') {
             this.clearAllConnections()
+        }
+        // Press 'Space' to play/pause
+        if (event.key === ' ') {
+            // Prevent default behavior (scrolling) when pressing space
+            event.preventDefault()
+            
+            if (this.currentTrack) {
+                if (this.isPlaying) {
+                    this.audio.pause()
+                    this.isPlaying = false
+                } else {
+                    // Resume audio context if suspended
+                    if (this.audioContext && this.audioContext.state === 'suspended') {
+                        this.audioContext.resume()
+                    }
+                    this.audio.play()
+                    this.isPlaying = true
+                }
+                this.updatePlayButton()
+            }
         }
     }
 
@@ -2489,7 +2743,7 @@ export class MusicPlayer3D {
                 }
             }
             
-            // Auto-play next track if available
+            // Auto-play next track in playlist/path
             if (this.selectedTracks.length > 1) {
                 console.log('🎵 Track ended, auto-playing next...')
                 this.playNext()
@@ -2659,14 +2913,20 @@ export class MusicPlayer3D {
         if (this.discoveryMode === 'similar') {
             // Turn off similar mode
             this.discoveryMode = 'none'
-            this.clearAllConnections()
+            // Don't clear selected tracks - they represent the user's playlist
+            // Only clear the connections and similarity context
+            this.clearConnectionsOnly()
             this.similarityContext.clear()
+            // Show playlist connections again
+            this.showPlaylistConnections()
             this.updateDiscoveryUI()
         } else {
             // Turn on similar mode
             this.discoveryMode = 'similar'
             this.pathfindingState = { startTrack: null, endTrack: null, settingStart: false, settingEnd: false }
-            this.clearAllConnections()
+            // Don't clear selected tracks - they represent the user's playlist
+            // Only clear the connections and similarity context
+            this.clearConnectionsOnly()
             this.similarityContext.clear()
             this.updateDiscoveryUI()
         }
@@ -2674,7 +2934,9 @@ export class MusicPlayer3D {
 
     setPathfindingMode(type) {
         this.discoveryMode = 'pathfinding'
-        this.clearAllConnections()
+        // Don't clear selected tracks - they represent the user's playlist
+        // Only clear the connections
+        this.clearConnectionsOnly()
         
         if (type === 'start') {
             this.pathfindingState.settingStart = true
@@ -2693,49 +2955,88 @@ export class MusicPlayer3D {
             return
         }
 
-        this.clearAllConnections()
+        // Don't clear selected tracks - they represent the user's playlist
+        // Only clear the connections
+        this.clearConnectionsOnly()
         
         const path = this.calculateShortestPath(this.pathfindingState.startTrack, this.pathfindingState.endTrack)
         if (path && path.length > 1) {
             this.showPath(path)
             this.addPathToPlaylist(path)
-            this.updateDiscoveryStatus(`Found path with ${path.length} tracks - added to playlist`)
+            this.updateDiscoveryStatus(`Found path with ${path.length} tracks - now playing`)
         } else {
-            this.updateDiscoveryStatus('No path found between tracks')
+            // Check if the tracks are simply not connected at all
+            const startConnected = this.connections.some(c => 
+                c.source === this.pathfindingState.startTrack || c.target === this.pathfindingState.startTrack)
+            const endConnected = this.connections.some(c => 
+                c.source === this.pathfindingState.endTrack || c.target === this.pathfindingState.endTrack)
+            
+            if (!startConnected || !endConnected) {
+                this.updateDiscoveryStatus('One or both tracks are not connected to the musical network')
+            } else {
+                this.updateDiscoveryStatus('No efficient path found between tracks (they may be too dissimilar)')
+            }
         }
     }
 
     addPathToPlaylist(path) {
-        // Clear current selected tracks
-        this.selectedTracks = []
-        this.currentTrackIndex = -1
-        
-        // Add each track in the path to the playlist
+        // Add each track in the path to the playlist (append to existing)
+        let addedCount = 0
         path.forEach((trackId, index) => {
             const track = this.tracks.find(t => (t.track_id || t.uuid || t.id) === trackId)
             if (track) {
-                this.selectedTracks.push(track)
-                
-                // Visual selection for tracks in path
-                const sphere = this.trackMap?.get(trackId)
-                if (sphere) {
-                    this.clickedSpheres.add(trackId)
-                    this.addBloomEffect(sphere)
-                    sphere.scale.set(1.3, 1.3, 1.3)
+                // Check if already in playlist
+                const existing = this.selectedTracks.findIndex(t => (t.track_id || t.uuid || t.id) === trackId)
+                if (existing === -1) {
+                    this.selectedTracks.push(track)
+                    addedCount++
+                    
+                    // Visual selection for tracks in path
+                    const sphere = this.trackMap?.get(trackId)
+                    if (sphere) {
+                        this.clickedSpheres.add(trackId)
+                        this.addBloomEffect(sphere)
+                        sphere.scale.set(1.3, 1.3, 1.3)
+                    }
                 }
             }
         })
         
-        // Set first track as current
-        if (this.selectedTracks.length > 0) {
-            this.currentTrackIndex = 0
+        // Set first track in path as current if no current track
+        if (this.currentTrackIndex === -1 && this.selectedTracks.length > 0) {
+            // Find the index of the first track in the path within our playlist
+            const firstPathTrackId = path[0]
+            const firstPathTrackIndex = this.selectedTracks.findIndex(t => 
+                (t.track_id || t.uuid || t.id) === firstPathTrackId)
+            if (firstPathTrackIndex !== -1) {
+                this.currentTrackIndex = firstPathTrackIndex
+            } else {
+                this.currentTrackIndex = 0
+            }
+            // Auto-play the first track in the path
+            this.playTrackByIndex(this.currentTrackIndex)
+        } else if (addedCount > 0) {
+            // If we added tracks and already have a current track, just update the display
+            // Auto-play the first track in the path if it's not already playing
+            const firstPathTrackId = path[0]
+            const firstPathTrackIndex = this.selectedTracks.findIndex(t => 
+                (t.track_id || t.uuid || t.id) === firstPathTrackId)
+            if (firstPathTrackIndex !== -1 && firstPathTrackIndex !== this.currentTrackIndex) {
+                this.currentTrackIndex = firstPathTrackIndex
+                this.playTrackByIndex(this.currentTrackIndex)
+            }
         }
         
         this.saveSelectedTracks()
         this.updateSelectedTracksList()
         this.updateTrackCountDisplay()
         
-        console.log(`[PATH] Added ${path.length} tracks to playlist`)
+        // Show playlist connections
+        if (this.discoveryMode === 'none') {
+            this.showPlaylistConnections()
+        }
+        
+        console.log(`[PATH] Added ${addedCount} tracks to playlist`)
     }
 
     addSimilarTracksToPlaylist() {
@@ -2759,6 +3060,7 @@ export class MusicPlayer3D {
         }
 
         // Add tracks to playlist (append to existing)
+        let addedCount = 0
         tracksToAdd.forEach(track => {
             const trackId = track.track_id || track.uuid || track.id
             
@@ -2766,6 +3068,7 @@ export class MusicPlayer3D {
             const existing = this.selectedTracks.findIndex(t => (t.track_id || t.uuid || t.id) === trackId)
             if (existing === -1) {
                 this.selectedTracks.push(track)
+                addedCount++
                 
                 // Visual selection
                 const sphere = this.trackMap?.get(trackId)
@@ -2787,8 +3090,13 @@ export class MusicPlayer3D {
         this.updateTrackCountDisplay()
         this.updateDiscoveryUI()
 
-        console.log(`[SIMILAR] Added ${tracksToAdd.length} similar tracks to playlist`)
-        this.updateDiscoveryStatus(`Added ${tracksToAdd.length} similar tracks to playlist`)
+        // Show playlist connections
+        if (this.discoveryMode === 'none') {
+            this.showPlaylistConnections()
+        }
+
+        console.log(`[SIMILAR] Added ${addedCount} similar tracks to playlist`)
+        this.updateDiscoveryStatus(`Added ${addedCount} similar tracks to playlist`)
     }
 
     calculateShortestPath(startTrackId, endTrackId) {
@@ -2814,46 +3122,76 @@ export class MusicPlayer3D {
             }
         })
 
-        // Dijkstra's algorithm
+        // Enhanced pathfinding with strong preference for shorter paths (around 10 tracks)
         const distances = new Map()
         const previous = new Map()
-        const unvisited = new Set()
+        const pathLengths = new Map()
+        const visited = new Set()
 
-        // Initialize distances
+        // Initialize distances and path lengths
         this.tracks.forEach(track => {
             const trackId = track.track_id || track.uuid || track.id
             distances.set(trackId, trackId === startTrackId ? 0 : Infinity)
             previous.set(trackId, null)
-            unvisited.add(trackId)
+            pathLengths.set(trackId, trackId === startTrackId ? 0 : Infinity)
         })
 
-        while (unvisited.size > 0) {
+        // Target path length (around 10 tracks)
+        const targetPathLength = 10
+        const maxPathLength = 25 // Hard limit to prevent extremely long paths
+
+        while (true) {
             // Find unvisited node with smallest distance
             let current = null
             let smallestDistance = Infinity
             
-            for (const trackId of unvisited) {
-                if (distances.get(trackId) < smallestDistance) {
-                    smallestDistance = distances.get(trackId)
+            for (const [trackId, distance] of distances) {
+                if (!visited.has(trackId) && distance < smallestDistance) {
+                    smallestDistance = distance
                     current = trackId
                 }
             }
 
+            // If no unvisited nodes or distance is infinite, we're done
             if (current === null || smallestDistance === Infinity) break
+            
+            // If we've reached the target, we're done
             if (current === endTrackId) break
+            
+            // If path is getting too long, stop exploring this path
+            if (pathLengths.get(current) >= maxPathLength) {
+                visited.add(current)
+                continue
+            }
 
-            unvisited.delete(current)
+            visited.add(current)
 
             // Check neighbors
             const neighbors = graph.get(current) || []
             neighbors.forEach(neighbor => {
-                if (unvisited.has(neighbor.target)) {
-                    // Use inverse of similarity as distance (higher similarity = shorter path)
-                    const distance = distances.get(current) + (1 - neighbor.weight)
+                if (!visited.has(neighbor.target)) {
+                    const currentPathLength = pathLengths.get(current)
+                    const newPathLength = currentPathLength + 1
+                    
+                    // Skip if this path is already too long
+                    if (newPathLength > maxPathLength) return
+                    
+                    // Use inverse of similarity as base distance (higher similarity = shorter path)
+                    const baseDistance = 1 - neighbor.weight
+                    
+                    // Strongly penalize paths that deviate from our target length of 10
+                    const lengthDeviation = Math.abs(newPathLength - targetPathLength)
+                    const lengthPenalty = lengthDeviation * 0.5 // Strong penalty for deviating from target length
+                    
+                    // Additional penalty for very long paths
+                    const longPathPenalty = newPathLength > targetPathLength ? (newPathLength - targetPathLength) * 0.3 : 0
+                    
+                    const distance = distances.get(current) + baseDistance + lengthPenalty + longPathPenalty
                     
                     if (distance < distances.get(neighbor.target)) {
                         distances.set(neighbor.target, distance)
                         previous.set(neighbor.target, current)
+                        pathLengths.set(neighbor.target, newPathLength)
                     }
                 }
             })
@@ -2868,12 +3206,25 @@ export class MusicPlayer3D {
             current = previous.get(current)
         }
 
-        // Return path only if we found a route to the end
-        return path.length > 1 && path[0] === startTrackId ? path : null
+        // Return path only if we found a route to the end and it's within reasonable length
+        if (path.length > 1 && path[0] === startTrackId && path.length <= maxPathLength + 1) {
+            console.log(`[PATH] Found path with ${path.length} tracks`)
+            return path
+        }
+        
+        console.log(`[PATH] No valid path found`)
+        return null
     }
 
     showPath(path) {
         const connectionLines = []
+        
+        // Determine visual properties based on path length
+        const pathLength = path.length
+        
+        // Color gradient from start to end
+        const startColor = new THREE.Color(0x1DB954) // Spotify green
+        const endColor = new THREE.Color(0x9A4AE2)   // Purple
         
         for (let i = 0; i < path.length - 1; i++) {
             const sourceSphere = this.trackMap.get(path[i])
@@ -2882,15 +3233,41 @@ export class MusicPlayer3D {
             if (sourceSphere && targetSphere) {
                 const points = [sourceSphere.position.clone(), targetSphere.position.clone()]
                 const geometry = new THREE.BufferGeometry().setFromPoints(points)
+                
+                // Interpolate color along the path
+                const t = pathLength > 1 ? i / (pathLength - 1) : 0
+                const lineColor = new THREE.Color().lerpColors(startColor, endColor, t)
+                
+                // Adjust opacity and width based on path length
+                let opacity, width
+                if (pathLength <= 5) {
+                    opacity = 0.9
+                    width = 3
+                } else if (pathLength <= 10) {
+                    opacity = 0.8
+                    width = 2.5
+                } else if (pathLength <= 15) {
+                    opacity = 0.7
+                    width = 2
+                } else {
+                    opacity = 0.6
+                    width = 1.5
+                }
+                
                 const material = new THREE.LineBasicMaterial({
-                    color: new THREE.Color(0x9A4AE2), // Purple for path
+                    color: lineColor,
                     transparent: true,
-                    opacity: 0.9,
-                    linewidth: 2
+                    opacity: opacity,
+                    linewidth: width
                 })
                 
                 const line = new THREE.Line(geometry, material)
-                line.userData = { type: 'pathLine', isStatic: true } // Mark as static to skip animations
+                line.userData = { 
+                    type: 'pathLine', 
+                    isStatic: true,
+                    pathIndex: i,
+                    pathLength: pathLength
+                }
                 this.scene.add(line)
                 connectionLines.push(line)
             }
@@ -3127,7 +3504,11 @@ export class MusicPlayer3D {
             const audioUrl = `${this.apiBase}/uuid/${encodeURIComponent(testTrack.uuid)}/audio`
             this.vlog(`🔧 Testing URL: ${audioUrl}`, 'debug')
             
-            const response = await fetch(audioUrl, { method: 'GET' })
+            const response = await fetch(audioUrl, { 
+                method: 'GET',
+                mode: 'cors',
+                credentials: 'omit'
+            })
             this.vlog(`🔧 Response status: ${response.status}`, 'debug')
             
             if (response.ok) {
@@ -3172,11 +3553,39 @@ export class MusicPlayer3D {
             }
         })
         
+        // Update playlist connection lines
+        const playlistConnections = this.activeConnections.get('playlist')
+        if (playlistConnections) {
+            playlistConnections.forEach(line => {
+                if (line.userData.sourceTrack && line.userData.targetTrack) {
+                    const sourceSphere = this.trackMap.get(line.userData.sourceTrack)
+                    const targetSphere = this.trackMap.get(line.userData.targetTrack)
+                    
+                    if (sourceSphere && targetSphere) {
+                        // Update the curved line geometry
+                        const startPoint = sourceSphere.position.clone()
+                        const endPoint = targetSphere.position.clone()
+                        
+                        // Calculate a midpoint with an offset for the curve
+                        const midPoint = new THREE.Vector3().lerpVectors(startPoint, endPoint, 0.5)
+                        // Add some height to create a curve (can vary based on audio or other factors)
+                        midPoint.y += 1.0
+                        
+                        // Create a quadratic bezier curve
+                        const curve = new THREE.QuadraticBezierCurve3(startPoint, midPoint, endPoint)
+                        const points = curve.getPoints(20) // Get 20 points along the curve
+                        line.geometry.setFromPoints(points)
+                    }
+                }
+            })
+        }
+        
         // SOPHISTICATED RENDERING - Use composer for enhanced bloom effects
         try {
             if (this.composer && this.bloomPass) {
                 // Adjust bloom parameters dynamically based on selected spheres + audio intensity
-                const selectedCount = this.clickedSpheres.size
+                // Use the total number of selected tracks (including those in playlist) for bloom effect
+                const selectedCount = this.selectedTracks.length > 0 ? this.selectedTracks.length : this.clickedSpheres.size
                 const audioIntensity = this.audioAnalysis ? this.audioAnalysis.overall * 0.5 : 0
                 if (selectedCount > 0) {
                     this.bloomPass.strength = Math.min(0.6, 0.3 + selectedCount * 0.05 + audioIntensity)
