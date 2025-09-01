@@ -6,28 +6,25 @@ Serves visualization data and provides analysis endpoints
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, FileResponse, StreamingResponse, Response
+from fastapi.responses import HTMLResponse, FileResponse, Response
 import httpx
 import uvicorn
 import json
 from pathlib import Path
 import sys
 import os
-import mimetypes
 import time
 from typing import Optional
 from urllib.parse import unquote
 
-# Add src to path for imports
 import sys
 
 sys.path.append(".")
 sys.path.append("..")
 
-from src.analysis.sonic_dna_extractor import SonicDNADatabase
-from src.analysis.emotional_space_mapper import EmotionalSpaceMapper
-from src.core.track_uuid_manager import get_uuid_manager
+from ..analysis.sonic_dna_extractor import SonicDNADatabase
+from ..analysis.emotional_space_mapper import EmotionalSpaceMapper
+from ..core.track_uuid_manager import get_uuid_manager
 
 app = FastAPI(
     title="Sonic DNA Analyzer API",
@@ -35,17 +32,16 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# Enable CORS for frontend with explicit configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for development
-    allow_credentials=False,  # Set to False when using wildcard origins
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"],
     allow_headers=["*"],
-    expose_headers=["*"],  # Expose all headers to frontend
+    expose_headers=["*"],
 )
 
-# Global instances
+
 dna_database = None
 space_mapper = None
 uuid_manager = None
@@ -55,7 +51,7 @@ uuid_file_mapping = None
 def load_uuid_file_mapping():
     """Load the UUID to file path mapping"""
     global uuid_file_mapping
-    # Use absolute path relative to the project root
+
     project_root = Path(__file__).parent.parent.parent
     mapping_path = project_root / "data/track_uuid_mapping.json"
     if mapping_path.exists():
@@ -75,11 +71,9 @@ async def startup_event():
     try:
         print("� Starting up API services...")
 
-        # Initialize services
         dna_database = SonicDNADatabase("data/sonic_dna")
         print(f"✅ DNA Database loaded with {len(dna_database.profiles)} profiles")
 
-        # Initialize the space mapper with DNA database
         if dna_database and len(dna_database.profiles) > 0:
             space_mapper = EmotionalSpaceMapper(dna_database)
             print(
@@ -92,7 +86,6 @@ async def startup_event():
         uuid_manager = get_uuid_manager()
         print(f"✅ UUID Manager loaded with {len(uuid_manager.uuid_to_track)} UUIDs")
 
-        # Load UUID file mapping
         load_uuid_file_mapping()
 
         print("🚀 All services initialized successfully!")
@@ -117,10 +110,8 @@ async def get_galaxy_data():
         raise HTTPException(status_code=404, detail="No analysis data available")
 
     try:
-        # Export fresh visualization data
         viz_data = space_mapper.export_visualization_data()
 
-        # Add UUIDs and metadata to each track from UUID manager
         if uuid_manager and "tracks" in viz_data:
             for track in viz_data["tracks"]:
                 track_id = track.get("track_id") or track.get("id")
@@ -128,21 +119,17 @@ async def get_galaxy_data():
                     track_uuid = uuid_manager.get_or_create_uuid(track_id)
                     track_metadata = uuid_manager.get_metadata(track_uuid)
 
-                    # Add UUID and enhanced metadata
                     track["uuid"] = track_uuid
                     if track_metadata:
-                        # Merge existing metadata with UUID metadata
                         if "metadata" not in track:
                             track["metadata"] = {}
                         track["metadata"].update(track_metadata)
 
-        # Add count information for debugging
         track_count = len(viz_data.get("tracks", []))
         edge_count = len(viz_data.get("connections", []))
 
         print(f"📊 Galaxy data: {track_count} tracks, {edge_count} connections")
 
-        # Add metadata to the response
         viz_data["metadata"] = {
             "total_tracks": track_count,
             "total_connections": edge_count,
@@ -173,7 +160,6 @@ async def get_tracks():
         track_uuid = uuid_manager.get_or_create_uuid(profile.track_id)
         track_metadata = uuid_manager.get_metadata(track_uuid)
 
-        # Add UUID and enhanced metadata
         track_dict["uuid"] = track_uuid
         track_dict["metadata"] = track_metadata
 
@@ -199,10 +185,8 @@ async def get_positioned_tracks():
         raise HTTPException(status_code=404, detail="Space mapper not available")
 
     try:
-        # Export fresh visualization data
         viz_data = space_mapper.export_visualization_data()
 
-        # Add UUIDs and metadata to each track from UUID manager
         if uuid_manager and "tracks" in viz_data:
             for track in viz_data["tracks"]:
                 track_id = track.get("track_id") or track.get("id")
@@ -210,21 +194,17 @@ async def get_positioned_tracks():
                     track_uuid = uuid_manager.get_or_create_uuid(track_id)
                     track_metadata = uuid_manager.get_metadata(track_uuid)
 
-                    # Add UUID and enhanced metadata
                     track["uuid"] = track_uuid
                     if track_metadata:
-                        # Merge existing metadata with UUID metadata
                         if "metadata" not in track:
                             track["metadata"] = {}
                         track["metadata"].update(track_metadata)
 
-        # Add count information for debugging
         track_count = len(viz_data.get("tracks", []))
         edge_count = len(viz_data.get("connections", []))
 
         print(f"📊 Positioned tracks: {track_count} tracks, {edge_count} connections")
 
-        # Add metadata to the response
         viz_data["metadata"] = {
             "total_tracks": track_count,
             "total_connections": edge_count,
@@ -248,11 +228,9 @@ async def get_counts():
     """Get detailed count information for debugging"""
     counts = {}
 
-    # DNA database counts
     if dna_database:
         counts["dna_profiles"] = len(dna_database.get_all_profiles())
 
-    # Emotional space data counts
     emotional_data_path = (
         Path(__file__).parent.parent.parent / "data" / "emotional_space_data.json"
     )
@@ -267,7 +245,6 @@ async def get_counts():
         except Exception as e:
             counts["emotional_space_error"] = str(e)
 
-    # Space mapper counts
     if space_mapper:
         try:
             viz_data = space_mapper.export_visualization_data()
@@ -276,7 +253,6 @@ async def get_counts():
         except Exception as e:
             counts["space_mapper_error"] = str(e)
 
-    # File system counts
     complete_library_path = (
         Path(__file__).parent.parent.parent / "data" / "complete_library"
     )
@@ -291,7 +267,6 @@ def normalize_string(s: str) -> str:
     """Normalize a string for comparison by removing special chars and spaces"""
     import re
 
-    # Remove special characters, spaces, and convert to lowercase
     normalized = re.sub(r"[^\w\s]", "", s.lower())
     normalized = re.sub(r"\s+", "", normalized)
     return normalized
@@ -301,15 +276,12 @@ def find_audio_file(track_id: str, base_path: Path) -> Optional[Path]:
     """Find audio file with robust matching"""
     print(f"🔎 find_audio_file called with track_id: '{track_id}'")
 
-    # Check DNA database for matches
     matched_dna_track = None
     if dna_database and hasattr(dna_database, "profiles"):
-        # First try exact match
         if track_id in dna_database.profiles:
             print(f"✅ Found exact match in DNA database: {track_id}")
             matched_dna_track = track_id
         else:
-            # Try normalized match
             track_norm = normalize_string(track_id)
             for db_key in dna_database.profiles.keys():
                 if normalize_string(db_key) == track_norm:
@@ -317,14 +289,12 @@ def find_audio_file(track_id: str, base_path: Path) -> Optional[Path]:
                     matched_dna_track = db_key
                     break
 
-            # Try partial match for international characters
             if not matched_dna_track:
                 track_parts = track_id.split("_")
                 if len(track_parts) >= 3:
                     for db_key in dna_database.profiles.keys():
                         db_parts = db_key.split("_")
                         if len(db_parts) >= 3:
-                            # Compare track names (last parts)
                             input_track = "_".join(track_parts[2:])
                             dna_track = "_".join(db_parts[2:])
 
@@ -342,13 +312,10 @@ def find_audio_file(track_id: str, base_path: Path) -> Optional[Path]:
                                 matched_dna_track = db_key
                                 break
 
-    # Use matched DNA track if found
     if matched_dna_track:
         track_id = matched_dna_track
         print(f"✅ Using DNA match: {track_id}")
 
-    # Parse track ID format: "Artist_Album_Track"
-    # Handle cases where artist names might contain underscores
     parts = track_id.split("_")
     if len(parts) < 3:
         print(
@@ -356,10 +323,8 @@ def find_audio_file(track_id: str, base_path: Path) -> Optional[Path]:
         )
         return None
 
-    # Smart parsing: try different combinations to find the right split
     parsing_strategies = []
 
-    # Strategy 1: Split by first 2 underscores (original approach)
     artist_v1 = parts[0]
     album_v1 = parts[1]
     track_name_v1 = "_".join(parts[2:])
@@ -367,7 +332,6 @@ def find_audio_file(track_id: str, base_path: Path) -> Optional[Path]:
         (artist_v1, album_v1, track_name_v1, "first_two_underscores")
     )
 
-    # Strategy 2: If first part looks like "The", combine with second part
     if len(parts) >= 4 and parts[0] in ["The", "A", "An"]:
         artist_v2 = f"{parts[0]} {parts[1]}"
         album_v2 = parts[2]
@@ -376,10 +340,8 @@ def find_audio_file(track_id: str, base_path: Path) -> Optional[Path]:
             (artist_v2, album_v2, track_name_v2, "the_prefix_handling")
         )
 
-    # Strategy 3: Try common multi-word artist patterns
     if len(parts) >= 4:
-        # Check for patterns like "Artist Name_Album_Track"
-        for split_point in [2, 3]:  # Try splitting after 2nd or 3rd word
+        for split_point in [2, 3]:
             if split_point < len(parts):
                 artist_v3 = " ".join(parts[:split_point])
                 if split_point + 1 < len(parts):
@@ -389,7 +351,6 @@ def find_audio_file(track_id: str, base_path: Path) -> Optional[Path]:
                         (artist_v3, album_v3, track_name_v3, f"split_at_{split_point}")
                     )
 
-    # Try each parsing strategy
     for strategy_idx, (
         artist_attempt,
         album_attempt,
@@ -400,7 +361,6 @@ def find_audio_file(track_id: str, base_path: Path) -> Optional[Path]:
             f"🎯 Strategy {strategy_idx + 1} ({strategy_name}): Artist='{artist_attempt}', Album='{album_attempt}', Track='{track_attempt}'"
         )
 
-        # Method 1: Direct path matching
         artist_path = base_path / artist_attempt
         print(f"📁 Checking artist path: {artist_path}")
         print(f"📁 Artist path exists: {artist_path.exists()}")
@@ -415,39 +375,34 @@ def find_audio_file(track_id: str, base_path: Path) -> Optional[Path]:
                 try:
                     files = list(album_path.glob("*.flac"))
                     print(f"📁 Found {len(files)} FLAC files:")
-                    for i, file in enumerate(files[:5]):  # Show first 5
+                    for i, file in enumerate(files[:5]):
                         print(f"  {i + 1}. {file.name}")
                     if len(files) > 5:
                         print(f"  ... and {len(files) - 5} more")
 
-                    # Look for exact or partial matches
                     for file in files:
                         file_stem = file.stem
                         print(
                             f"🔍 Comparing track_name='{track_attempt}' with file_stem='{file_stem}'"
                         )
 
-                        # Normalize both for comparison
                         track_norm = normalize_string(track_attempt)
                         file_norm = normalize_string(file_stem)
 
-                        # Multiple matching strategies
                         if (
-                            track_attempt == file_stem  # Exact match
-                            or track_attempt in file_stem  # Track in file
-                            or file_stem in track_attempt  # File in track
-                            or track_norm == file_norm  # Normalized exact
-                            or track_norm in file_norm  # Normalized substring
-                            or file_norm in track_norm  # File norm in track norm
-                            or track_attempt.replace("_", " ")
-                            in file_stem  # Replace underscores with spaces
-                            or file_stem.replace(" ", "_")
-                            in track_attempt  # Replace spaces with underscores
+                            track_attempt == file_stem
+                            or track_attempt in file_stem
+                            or file_stem in track_attempt
+                            or track_norm == file_norm
+                            or track_norm in file_norm
+                            or file_norm in track_norm
+                            or track_attempt.replace("_", " ") in file_stem
+                            or file_stem.replace(" ", "_") in track_attempt
                             or normalize_string(track_attempt.replace("_", " "))
-                            == file_norm  # Underscore to space + normalize
+                            == file_norm
                             or normalize_string(file_stem.replace(" ", "_"))
                             == track_norm
-                        ):  # Space to underscore + normalize
+                        ):
                             print(f"✅ Found match: {file}")
                             return file
                 except Exception as e:
@@ -456,10 +411,8 @@ def find_audio_file(track_id: str, base_path: Path) -> Optional[Path]:
 
     print(f"🔎 Direct path matching failed for all strategies, trying fuzzy search...")
 
-    # Fall back to first strategy for fuzzy search
     artist, album, track_name = parsing_strategies[0][:3]
 
-    # Method 2: Fuzzy search across entire library
     track_normalized = normalize_string(track_name)
     artist_normalized = normalize_string(artist)
     album_normalized = normalize_string(album)
@@ -474,10 +427,9 @@ def find_audio_file(track_id: str, base_path: Path) -> Optional[Path]:
         root_path = Path(root)
         search_count += 1
 
-        if search_count <= 3:  # Debug first few directories
+        if search_count <= 3:
             print(f"🔍 Searching directory {search_count}: {root_path}")
 
-        # Check if we're in the right artist/album vicinity
         root_normalized = normalize_string(str(root_path))
         if artist_normalized in root_normalized or album_normalized in root_normalized:
             print(f"🎯 Found relevant directory: {root_path}")
@@ -488,7 +440,6 @@ def find_audio_file(track_id: str, base_path: Path) -> Optional[Path]:
                     file_stem = Path(file).stem
                     file_normalized = normalize_string(file_stem)
 
-                    # Fuzzy matching
                     if (
                         track_normalized in file_normalized
                         or file_normalized in track_normalized
@@ -500,12 +451,10 @@ def find_audio_file(track_id: str, base_path: Path) -> Optional[Path]:
 
     print(f"❌ No audio file found after searching {search_count} directories")
 
-    # Method 3: Last resort - search by track name only across all artist directories
     print(f"🔍 Last resort: searching by track name only: '{track_name}'")
     for root, dirs, files in os.walk(base_path):
         root_path = Path(root)
 
-        # Only search in directories that contain the artist name
         if artist_normalized in normalize_string(str(root_path)):
             for file in files:
                 if file.endswith((".flac", ".mp3", ".wav", ".m4a", ".ogg")):
@@ -513,11 +462,9 @@ def find_audio_file(track_id: str, base_path: Path) -> Optional[Path]:
                     file_stem = Path(file).stem
                     file_normalized = normalize_string(file_stem)
 
-                    # Very fuzzy matching on track name only
                     track_words = set(track_normalized.split())
                     file_words = set(file_normalized.split())
 
-                    # If at least 60% of track words are in the file name
                     if (
                         track_words
                         and len(track_words & file_words) >= len(track_words) * 0.6
@@ -540,23 +487,21 @@ async def get_track_audio_by_uuid(track_uuid: str):
 
     print(f"🎵 GET /api/uuid/{track_uuid}/audio")
 
-    # Use direct UUID to file mapping first
     audio_file_path = uuid_file_mapping.get(track_uuid)
 
-    # Check if it's a URL (new format) or local file path (old format)
     if audio_file_path:
-        # If it's a URL, proxy the request
         if audio_file_path.startswith("http"):
             print(f"✅ Found audio URL via direct mapping: {audio_file_path}")
-            # Proxy the content from the remote URL
+
             try:
                 async with httpx.AsyncClient() as client:
                     response = await client.get(audio_file_path)
                     if response.status_code == 200:
-                        # Return the content with appropriate headers
                         return Response(
                             content=response.content,
-                            media_type="audio/flac" if audio_file_path.endswith(".flac") else "audio/mpeg",
+                            media_type="audio/flac"
+                            if audio_file_path.endswith(".flac")
+                            else "audio/mpeg",
                             headers={
                                 "Accept-Ranges": "bytes",
                                 "Cache-Control": "public, max-age=3600",
@@ -567,18 +512,21 @@ async def get_track_audio_by_uuid(track_uuid: str):
                             },
                         )
                     else:
-                        print(f"❌ Failed to fetch audio from URL: {response.status_code}")
+                        print(
+                            f"❌ Failed to fetch audio from URL: {response.status_code}"
+                        )
             except Exception as e:
                 print(f"❌ Error fetching audio from URL: {str(e)}")
-        # If it's a local file path, check if it exists
+
         elif Path(audio_file_path).exists():
             print(f"✅ Found audio file via direct mapping: {audio_file_path}")
             audio_file = Path(audio_file_path)
 
-            # Return file response with appropriate headers
             return FileResponse(
                 path=str(audio_file),
-                media_type="audio/flac" if audio_file.suffix == ".flac" else "audio/mpeg",
+                media_type="audio/flac"
+                if audio_file.suffix == ".flac"
+                else "audio/mpeg",
                 filename=audio_file.name,
                 headers={
                     "Accept-Ranges": "bytes",
@@ -590,10 +538,8 @@ async def get_track_audio_by_uuid(track_uuid: str):
                 },
             )
 
-    # Fallback to original method if not in direct mapping
     print(f"⚠️  UUID {track_uuid} not found in direct mapping, trying fallback...")
 
-    # Get original track ID from UUID
     track_id = uuid_manager.get_track_id(track_uuid)
     if not track_id:
         raise HTTPException(
@@ -602,14 +548,11 @@ async def get_track_audio_by_uuid(track_uuid: str):
 
     print(f"🔍 UUID {track_uuid} maps to track_id: {track_id}")
 
-    # Get metadata for additional file info
     metadata = uuid_manager.get_metadata(track_uuid)
     audio_file_path = metadata.get("audio_file_path") if metadata else None
 
-    # Base path for audio files
     base_path = Path(__file__).parent.parent.parent / "data" / "complete_library"
 
-    # Use robust file finding
     audio_file = find_audio_file(track_id, base_path)
 
     if not audio_file or not audio_file.exists():
@@ -620,7 +563,6 @@ async def get_track_audio_by_uuid(track_uuid: str):
 
     print(f"✅ Found audio file via fallback: {audio_file}")
 
-    # Return file response with appropriate headers
     return FileResponse(
         path=str(audio_file),
         media_type="audio/flac" if audio_file.suffix == ".flac" else "audio/mpeg",
@@ -653,23 +595,21 @@ async def get_track_audio_by_uuid_post(request_data: dict):
 
     print(f"🎵 POST /api/uuid/audio with UUID: {track_uuid}")
 
-    # Use direct UUID to file mapping first
     audio_file_path = uuid_file_mapping.get(track_uuid)
 
-    # Check if it's a URL (new format) or local file path (old format)
     if audio_file_path:
-        # If it's a URL, proxy the request
         if audio_file_path.startswith("http"):
             print(f"✅ Found audio URL via direct mapping: {audio_file_path}")
-            # Proxy the content from the remote URL
+
             try:
                 async with httpx.AsyncClient() as client:
                     response = await client.get(audio_file_path)
                     if response.status_code == 200:
-                        # Return the content with appropriate headers
                         return Response(
                             content=response.content,
-                            media_type="audio/flac" if audio_file_path.endswith(".flac") else "audio/mpeg",
+                            media_type="audio/flac"
+                            if audio_file_path.endswith(".flac")
+                            else "audio/mpeg",
                             headers={
                                 "Accept-Ranges": "bytes",
                                 "Cache-Control": "public, max-age=3600",
@@ -680,18 +620,21 @@ async def get_track_audio_by_uuid_post(request_data: dict):
                             },
                         )
                     else:
-                        print(f"❌ Failed to fetch audio from URL: {response.status_code}")
+                        print(
+                            f"❌ Failed to fetch audio from URL: {response.status_code}"
+                        )
             except Exception as e:
                 print(f"❌ Error fetching audio from URL: {str(e)}")
-        # If it's a local file path, check if it exists
+
         elif Path(audio_file_path).exists():
             print(f"✅ Found audio file via direct mapping: {audio_file_path}")
             audio_file = Path(audio_file_path)
 
-            # Return file response with CORS headers
             return FileResponse(
                 path=str(audio_file),
-                media_type="audio/flac" if audio_file.suffix == ".flac" else "audio/mpeg",
+                media_type="audio/flac"
+                if audio_file.suffix == ".flac"
+                else "audio/mpeg",
                 filename=audio_file.name,
                 headers={
                     "Accept-Ranges": "bytes",
@@ -703,10 +646,8 @@ async def get_track_audio_by_uuid_post(request_data: dict):
                 },
             )
 
-    # Fallback to original method if not in direct mapping
     print(f"⚠️  UUID {track_uuid} not found in direct mapping, trying fallback...")
 
-    # Get original track ID from UUID
     track_id = uuid_manager.get_track_id(track_uuid)
     if not track_id:
         raise HTTPException(
@@ -715,10 +656,8 @@ async def get_track_audio_by_uuid_post(request_data: dict):
 
     print(f"🔍 UUID {track_uuid} maps to track_id: {track_id}")
 
-    # Base path for audio files
     base_path = Path(__file__).parent.parent.parent / "data" / "complete_library"
 
-    # Use robust file finding
     audio_file = find_audio_file(track_id, base_path)
 
     if not audio_file or not audio_file.exists():
@@ -729,7 +668,6 @@ async def get_track_audio_by_uuid_post(request_data: dict):
 
     print(f"✅ Found audio file via fallback: {audio_file}")
 
-    # Return file response with CORS headers
     return FileResponse(
         path=str(audio_file),
         media_type="audio/flac" if audio_file.suffix == ".flac" else "audio/mpeg",
@@ -752,7 +690,6 @@ async def get_track_by_uuid(track_uuid: str):
     if not uuid_manager or not dna_database:
         raise HTTPException(status_code=404, detail="Services not initialized")
 
-    # Get original track ID from UUID
     track_id = uuid_manager.get_track_id(track_uuid)
     if not track_id:
         raise HTTPException(
@@ -766,7 +703,6 @@ async def get_track_by_uuid(track_uuid: str):
     track_data = profile.to_dict()
     metadata = uuid_manager.get_metadata(track_uuid)
 
-    # Add UUID and metadata
     track_data["uuid"] = track_uuid
     track_data["metadata"] = metadata
     track_data["audio_url"] = f"/api/uuid/{track_uuid}/audio"
@@ -784,7 +720,6 @@ async def search_tracks(q: str):
 
     search_results = []
     for track_uuid, track_id, metadata in results:
-        # Get DNA profile if available
         profile_data = {}
         if dna_database:
             profile = dna_database.get_dna(track_id)
@@ -807,13 +742,11 @@ async def search_tracks(q: str):
 @app.get("/api/track/{track_id}/audio")
 async def get_track_audio(track_id: str):
     """Serve audio file for a track (legacy GET endpoint)"""
-    # Decode URL-encoded track ID
+
     track_id = unquote(track_id)
 
-    # Base path for audio files (only complete_library, not samples)
     base_path = Path(__file__).parent.parent.parent / "data" / "complete_library"
 
-    # Use robust file finding
     audio_file = find_audio_file(track_id, base_path)
 
     if not audio_file or not audio_file.exists():
@@ -821,7 +754,6 @@ async def get_track_audio(track_id: str):
             status_code=404, detail=f"Audio file not found for track: {track_id}"
         )
 
-    # Return file response with appropriate headers
     return FileResponse(
         path=str(audio_file),
         media_type="audio/flac" if audio_file.suffix == ".flac" else "audio/mpeg",
@@ -836,7 +768,6 @@ async def get_track(track_id: str):
     if not dna_database:
         raise HTTPException(status_code=404, detail="Database not initialized")
 
-    # Decode URL-encoded track ID
     track_id = unquote(track_id)
 
     profile = dna_database.get_dna(track_id)
@@ -845,7 +776,6 @@ async def get_track(track_id: str):
 
     track_data = profile.to_dict()
 
-    # Add audio URL if available
     track_data["audio_url"] = f"/api/track/{track_id}/audio"
 
     return track_data
@@ -979,4 +909,3 @@ if __name__ == "__main__":
     uvicorn.run(
         "api_server:app", host="0.0.0.0", port=8000, reload=True, log_level="info"
     )
-
